@@ -26,6 +26,6 @@ hs_err_pid*
 /config.properties
 /EoiTests.iml
 /columnsData/
-/KISSExtract_Engagement_BP2017Amendment.xls
 /extracts/
 /screenshots/
+src/main/resources/
