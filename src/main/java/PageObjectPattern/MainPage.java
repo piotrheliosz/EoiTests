@@ -1,7 +1,6 @@
 package PageObjectPattern;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -25,6 +24,8 @@ public class MainPage extends Page {
 
     public void navigateToEngagementsSection() {
         waitUntilVisibilityOfElement(outerContainer, 30);
-        driver.navigate().to(getCredentials("baseUrl") + "/portal/kicinnoenergy-acc/page/engagements-overview/");
+        if (!driver.getCurrentUrl().equals(getCredentials("baseUrl") + "/portal/kicinnoenergy-acc/page/engagements-overview/")) {
+            driver.navigate().to(getCredentials("baseUrl") + "/portal/kicinnoenergy-acc/page/engagements-overview/");
+        }
     }
 }

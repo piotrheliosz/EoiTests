@@ -1,10 +1,11 @@
 import PageObjectPattern.EngagementsPage;
 import PageObjectPattern.MainPage;
-import SetUp.ReportReader;
 import org.openqa.selenium.TimeoutException;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static java.lang.Thread.sleep;
@@ -27,8 +28,8 @@ public class ExtractedEngagementDataTest extends Scenario {
 
         for (String id : ids) {
             try {
-                engagementsPage.searchForEnagagementOnGrid(id);
-                assertEquals(engagementsPage.foundEngagementById(), id);
+                engagementsPage.searchForEnagagementOnGridById(id);
+                assertEquals(engagementsPage.foundEngagementId(), id);
             } catch (AssertionError error) {
                 System.out.println("ID: " + id + " | " + error);
             }
@@ -51,11 +52,13 @@ public class ExtractedEngagementDataTest extends Scenario {
 
             try {
                 String id = ids.get(i);
-                engagementsPage.searchForEnagagementOnGrid(id);
+                engagementsPage.searchForEnagagementOnGridById(id);
                 String name = names.get(i);
-                assertEquals(engagementsPage.foundEngagementByName().toUpperCase(), name.toUpperCase());
+                assertEquals(engagementsPage.foundEngagementName().toUpperCase(), name.toUpperCase());
             } catch (AssertionError error) {
-                System.out.println("ID: " + ids.get(i) + " | " + error);
+                if (!ids.get(i).contains("ENG")) {
+                    System.out.println("ID: " + ids.get(i) + " | " + error);
+                }
             }
             engagementsPage.engagementIdFilter.clear();
         }
@@ -76,18 +79,21 @@ public class ExtractedEngagementDataTest extends Scenario {
             String objective = null;
             try {
                 String id = ids.get(i);
-                engagementsPage.searchForEnagagementOnGrid(id);
+                engagementsPage.searchForEnagagementOnGridById(id);
+                engagementsPage.selectFoundEngagement();
                 engagementsPage.openEditPopUp();
                 objective = objectives.get(i);
                 try {
                     assertEquals(engagementsPage.getObjective(), objective);
-                }catch (TimeoutException e){
+                } catch (TimeoutException e) {
                     e.printStackTrace();
                     engagementsPage.takeScreenShot(id + " " + getClass().toString());
                 }
-            } catch (AssertionError error) {
-                System.out.println("ID: " + ids.get(i) + " | java.lang.AssertionError" +
-                        "\nKISS EXTRACT: " + objective + "\nEOI: " + engagementsPage.getObjective() + "\n");
+            } catch (AssertionError error) {/**/
+                if (engagementsPage.getObjective().equals("") || !ids.get(i).contains("ENG")) {
+                    System.out.println("ID: " + ids.get(i) + " | java.lang.AssertionError" +
+                            "\nKISS EXTRACT: " + objective + "\nEOI: " + engagementsPage.getObjective() + "\n");
+                }
             }
 
             engagementsPage.closePopUp();
@@ -110,8 +116,9 @@ public class ExtractedEngagementDataTest extends Scenario {
             String scope = null;
             try {
                 String id = ids.get(i);
-                engagementsPage.searchForEnagagementOnGrid(id);
+                engagementsPage.searchForEnagagementOnGridById(id);
                 scope = scopes.get(i);
+                engagementsPage.selectFoundEngagement();
                 engagementsPage.openEditPopUp();
                 try {
                     assertEquals(engagementsPage.getScope(), scope);
@@ -120,8 +127,10 @@ public class ExtractedEngagementDataTest extends Scenario {
                     engagementsPage.takeScreenShot(id + " " + getClass().toString());
                 }
             } catch (AssertionError error) {
-                System.out.println("ID: " + ids.get(i) + " | java.lang.AssertionError" +
-                        "\nKISS EXTRACT: " + scope + "\nEOI: " + engagementsPage.getScope() + "\n");
+                if (engagementsPage.getScope().equals("") || !ids.get(i).contains("ENG")) {
+                    System.out.println("ID: " + ids.get(i) + " | java.lang.AssertionError" +
+                            "\nKISS EXTRACT: " + scope + "\nEOI: " + engagementsPage.getScope() + "\n");
+                }
             }
             engagementsPage.closePopUp();
             engagementsPage.engagementIdFilter.clear();
@@ -143,11 +152,13 @@ public class ExtractedEngagementDataTest extends Scenario {
 
             try {
                 String id = ids.get(i);
-                engagementsPage.searchForEnagagementOnGrid(id);
+                engagementsPage.searchForEnagagementOnGridById(id);
                 String type = types.get(i);
-                assertEquals(engagementsPage.foundEngagementByType().toUpperCase(), type.toUpperCase());
+                assertEquals(engagementsPage.foundEngagementType().toUpperCase(), type.toUpperCase());
             } catch (AssertionError error) {
-                System.out.println("ID: " + ids.get(i) + " | " + error);
+                if (engagementsPage.foundEngagementType().equals("") || !ids.get(i).contains("ENG")) {
+                    System.out.println("ID: " + ids.get(i) + " | " + error);
+                }
             }
             engagementsPage.engagementIdFilter.clear();
         }
@@ -168,11 +179,13 @@ public class ExtractedEngagementDataTest extends Scenario {
 
             try {
                 String id = ids.get(i);
-                engagementsPage.searchForEnagagementOnGrid(id);
+                engagementsPage.searchForEnagagementOnGridById(id);
                 String name = managementUnits.get(i);
-                assertEquals(engagementsPage.foundEngagementByManagementUnit().toUpperCase(), name.toUpperCase());
+                assertEquals(engagementsPage.foundEngagementManagementUnit().toUpperCase(), name.toUpperCase());
             } catch (AssertionError error) {
-                System.out.println("ID: " + ids.get(i) + " | " + error);
+                if (engagementsPage.foundEngagementManagementUnit().equals("") || !ids.get(i).contains("ENG")) {
+                    System.out.println("ID: " + ids.get(i) + " | " + error);
+                }
             }
             engagementsPage.engagementIdFilter.clear();
         }
@@ -193,15 +206,18 @@ public class ExtractedEngagementDataTest extends Scenario {
             String thematicField = null;
             try {
                 String id = ids.get(i);
-                engagementsPage.searchForEnagagementOnGrid(id);
+                engagementsPage.searchForEnagagementOnGridById(id);
+                engagementsPage.selectFoundEngagement();
                 engagementsPage.openEditPopUp();
                 thematicField = thematicFields.get(i);
-                if (!engagementsPage.foundEngagementByType().contains("BCS")) {
+                if (!engagementsPage.foundEngagementType().contains("BCS")) {
                     assertEquals(engagementsPage.getThematicField(), thematicField);
                 }
             } catch (AssertionError error) {
-                System.out.println("ID: " + ids.get(i) + " | java.lang.AssertionError" +
-                        "\nKISS EXTRACT: " + thematicField + "\nEOI: " + engagementsPage.getThematicField() + "\n");
+                if (engagementsPage.getThematicField().equals("") || !ids.get(i).contains("ENG")) {
+                    System.out.println("ID: " + ids.get(i) + " | java.lang.AssertionError" +
+                            "\nKISS EXTRACT: " + thematicField + "\nEOI: " + engagementsPage.getThematicField() + "\n");
+                }
             }
 
             engagementsPage.closePopUp();
@@ -224,11 +240,12 @@ public class ExtractedEngagementDataTest extends Scenario {
 
             try {
                 String id = ids.get(i);
-                engagementsPage.searchForEnagagementOnGrid(id);
+                engagementsPage.searchForEnagagementOnGridById(id);
                 String bla = blas.get(i);
-                assertEquals(engagementsPage.foundEngagementByBla().toUpperCase(), bla.toUpperCase());
+                assertEquals(engagementsPage.foundEngagementBla().toUpperCase(), bla.toUpperCase());
             } catch (AssertionError error) {
-                System.out.println("ID: " + ids.get(i) + " | " + error);
+                if (engagementsPage.foundEngagementBla().equals("") || !ids.get(i).contains("ENG"))
+                    System.out.println("ID: " + ids.get(i) + " | " + error);
             }
             engagementsPage.engagementIdFilter.clear();
         }
@@ -241,23 +258,52 @@ public class ExtractedEngagementDataTest extends Scenario {
 
         ReportReader extract = new ReportReader(filePath, "Engagement", "Engagement ID,Partners");
         List<String> ids = (extract.getList("Engagement ID"));
-        List<String> partners = (extract.getList("Partners"));
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
 
         for (int i = 0; i < ids.size(); i++) {
+            String engagementId = ids.get(i);
+            engagementsPage.searchForEnagagementOnGridById(engagementId);
+            engagementsPage.selectFoundEngagement();
+
+            List<String> partnersExtracted = (extract.getList("Partners"));
+
+            String[] partnersLineIds = partnersExtracted.get(i).split(",");
+            sleep(2000); //to avoid stale element because dynamic searching
+
+            List<String> partnersLineIdsList = new ArrayList<String>();
+            partnersLineIdsList.addAll(Arrays.asList(partnersLineIds));
+
+            List<String> eoiIds = new ArrayList<String>();
+            for (String eoiPartner : engagementsPage.foundEngagementPartners()) {
+                String[] bits = eoiPartner.split("\\(");
+
+                String eoiId = "";
+
+                try {
+                    eoiId = bits[bits.length - 1].substring(0, bits[bits.length - 1].length() - 1);
+                } catch (StringIndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                    engagementsPage.takeScreenShot("StringIndexOutOfBoundsException");
+                }
+
+                eoiIds.add(eoiId);
+                if (eoiIds.size() == 9 && engagementsPage.footedIsDisplayed()) {
+                    engagementsPage.gotoAnotherPage();
+                    for (String eoiPartner2 : engagementsPage.foundEngagementPartners()) {
+                        String[] bits2 = eoiPartner2.split("\\(");
+                        String eoiId2 = bits2[bits2.length - 1].substring(0, bits2[bits2.length - 1].length() - 1);
+                        eoiIds.add(eoiId2);
+                    }
+                }
+            }
 
             try {
-                String id = ids.get(i);
-                engagementsPage.searchForEnagagementOnGrid(id);
-                sleep(500); //to avoid stale element because dynamic searching
-                String[] partnersLine = partners.get(i).split(",");
-                for (String partnerId : partnersLine) {
-                    String partnersInLine = engagementsPage.foundEngagementByPartner(partnersLine.length).toString();
-                    assertTrue(partnersInLine.contains(partnerId));
-                }
+                assertTrue(eoiIds.containsAll(partnersLineIdsList));
             } catch (AssertionError error) {
                 System.out.println("ID: " + ids.get(i) + " | " + error);
+                System.out.println("EOI Partners:     " + eoiIds);
+                System.out.println("KISS Partners:    " + partnersLineIdsList + "\n");
             }
             engagementsPage.engagementIdFilter.clear();
         }

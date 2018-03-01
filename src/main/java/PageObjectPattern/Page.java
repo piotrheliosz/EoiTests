@@ -26,12 +26,14 @@ public class Page {
         loadingElement();
         WebDriverWait wait = new WebDriverWait(driver, timeout);
         wait.until(ExpectedConditions.visibilityOf(element));
+        loadingElement();
     }
 
     void loadingElement() {
         WebDriverWait wait = new WebDriverWait(driver, 20);
         /*System.out.println("loading elements: "
-                + driver.findElements(By.xpath("//div[contains(@class, 'loader')or contains(@class ,'overlay')]")).size());*/
+                + driver.findElements
+                (By.xpath("//div[contains(@class, 'loader')or contains(@class ,'overlay')]")).size());*/
         wait.until(ExpectedConditions.invisibilityOfAllElements(
                 driver.findElements(By.xpath("//div[contains(@class, 'loader')]"))));
     }
@@ -53,8 +55,8 @@ public class Page {
         FileUtils.copyFile(scrFile, new File("screenshots\\" + fileName + ".png"));
     }
 
-    public void clearByBackSpaceKey(WebElement element, int size) {
-        for (int in = 0; in < size; in++) {
+    public void clearByBackSpaceKey(WebElement element, int stringLength) {
+        for (int in = 0; in < stringLength; in++) {
             element.sendKeys(Keys.BACK_SPACE);
         }
     }
