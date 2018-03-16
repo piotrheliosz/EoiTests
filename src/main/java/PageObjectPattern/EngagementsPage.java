@@ -53,13 +53,17 @@ public class EngagementsPage extends Page {
     @FindBy(xpath = "//*[text()='View']")
     WebElement viewButton;
 
-    public void searchForEnagagementOnGridById(String id) throws InterruptedException {
-        waitUntilVisibilityOfElement(engagementIdFilter, 10);
-        engagementIdFilter.sendKeys(id);
-        WebDriverWait wait = new WebDriverWait(driver, 5);
-        wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath("//table[1]/tbody[@class='rgrid rgridtree']/tr[contains(@id, 'row')]"), 1));
-        loadingElement();
-        //sleep(3000); //TODO
+    public void searchForEnagagementOnGridById(String id) throws InterruptedException, IOException {
+        try {
+            waitUntilVisibilityOfElement(engagementIdFilter, 10);
+            engagementIdFilter.sendKeys(id);
+            WebDriverWait wait = new WebDriverWait(driver, 5);
+            wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath("//table[1]/tbody[@class='rgrid rgridtree']/tr[contains(@id, 'row')]"), 1));
+            loadingElement();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+            takeScreenShot(id + "_searchForEnagagementOnGridById");
+        }
     }
 
     public void selectFoundEngagement() {
