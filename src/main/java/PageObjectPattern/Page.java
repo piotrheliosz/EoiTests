@@ -50,7 +50,7 @@ public class Page {
         return null;
     }
 
-    public void takeScreenShot(String fileName) throws IOException {
+    public void takeScreenShot(String fileName) throws IOException, WebDriverException {
         File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
         FileUtils.copyFile(scrFile, new File("screenshots\\" + fileName + ".png"));
     }
