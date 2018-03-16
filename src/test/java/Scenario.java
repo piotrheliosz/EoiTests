@@ -18,6 +18,7 @@ public class Scenario {
 
         System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
         System.setProperty("webdriver.edge.driver", "C:\\MicrosoftWebDriver.exe");
+        System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.Jdk14Logger");
 
         driver = new ChromeDriver();
         //driver = new EdgeDriver();

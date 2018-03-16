@@ -53,17 +53,24 @@ public class EngagementsPage extends Page {
     @FindBy(xpath = "//*[text()='View']")
     WebElement viewButton;
 
-    public void searchForEnagagementOnGridById(String id) throws InterruptedException {
+    public void searchForEngagementOnGridById(String id) throws InterruptedException {
         waitUntilVisibilityOfElement(engagementIdFilter, 10);
         engagementIdFilter.sendKeys(id);
         WebDriverWait wait = new WebDriverWait(driver, 5);
-        wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath("//table[1]/tbody[@class='rgrid rgridtree']/tr[contains(@id, 'row')]"), 1));
+        try {
+            wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath("//table[1]/tbody[@class='rgrid rgridtree']/tr[contains(@id, 'row')]"), 1));
+        } catch (Exception e) {
+            e.getStackTrace();
+            System.out.println("Engagement ID: " + id);
+        }
         loadingElement();
-        //sleep(3000); //TODO
     }
 
     public void selectFoundEngagement() {
-        driver.findElement(By.xpath("//table[1]/tbody[@class='rgrid rgridtree']/tr[contains(@id, 'row')]/td[3]")).click();
+        try {
+            driver.findElement(By.xpath("//table[1]/tbody[@class='rgrid rgridtree']/tr[contains(@id, 'row')]/td[3]")).click();
+        } catch (NoSuchElementException ignore) {
+        }
     }
 
     public String foundEngagementId() {
@@ -108,6 +115,33 @@ public class EngagementsPage extends Page {
         }
     }
 
+    public String getScope() throws IOException {
+        try {
+            waitUntilVisibilityOfElement(scopeTextarea, 5);
+            return scopeTextarea.getAttribute("value");
+        } catch (Exception e) {
+            return "NOT_FOND";
+        }
+    }
+
+    public String getThematicField() {
+        try {
+            waitUntilVisibilityOfElement(thematicField, 5);
+            return thematicField.getText();
+        } catch (Exception e) {
+            return "NOT_FOND";
+        }
+    }
+
+    public String getObjective() {
+        try {
+            waitUntilVisibilityOfElement(objectiveTextarea, 5);
+            return objectiveTextarea.getAttribute("value");
+        } catch (Exception e) {
+            return "NOT_FOND";
+        }
+    }
+
     public List<String> foundEngagementPartners() throws InterruptedException {
         List<String> partnersList = new ArrayList<String>();
         List<WebElement> partnersOnGrid = driver.findElements(By.xpath("//table/tbody[@class='rgrid rgridlist']/tr/td[1]"));
@@ -118,45 +152,33 @@ public class EngagementsPage extends Page {
         return partnersList;
     }
 
-    public String getObjective() {
-        waitUntilVisibilityOfElement(objectiveTextarea, 5);
-        return objectiveTextarea.getAttribute("value");
-    }
-
-    public String getScope() throws IOException {
-        waitUntilVisibilityOfElement(scopeTextarea, 5);
-        return scopeTextarea.getAttribute("value");
-    }
-
-    public String getThematicField() {
-        waitUntilVisibilityOfElement(thematicField, 5);
-        return thematicField.getText();
-    }
-
     public void closePopUp() throws IOException {
         try {
             waitUntilVisibilityOfElement(closePopUp, 5);
             closePopUp.click();
             loadingElement();
         } catch (WebDriverException e) {
-            e.printStackTrace();
             takeScreenShot("closePopUp");
-            closePopUp.click();
         }
     }
 
     public void openEditPopUp() throws IOException {
         try {
-            waitUntilVisibilityOfElement(editEngagementButton, 10);
-            editEngagementButton.click();
-            loadingElement();
-            waitUntilVisibilityOfElement(closePopUp, 10);
-        } catch (TimeoutException e) {
-            takeScreenShot("openEditPopUp");
-            waitUntilVisibilityOfElement(editEngagementButton, 10);
-            editEngagementButton.click();
-            loadingElement();
-            waitUntilVisibilityOfElement(closePopUp, 10);
+            try {
+                waitUntilVisibilityOfElement(editEngagementButton, 10);
+                editEngagementButton.click();
+                loadingElement();
+                waitUntilVisibilityOfElement(closePopUp, 10);
+            } catch (TimeoutException e) {
+                takeScreenShot("openEditPopUp");
+                waitUntilVisibilityOfElement(editEngagementButton, 10);
+                editEngagementButton.click();
+                loadingElement();
+                waitUntilVisibilityOfElement(closePopUp, 10);
+            }
+        } catch (UnhandledAlertException e) {
+            System.out.println(driver.switchTo().alert().getText());
+            driver.switchTo().alert().accept();
         }
     }
 

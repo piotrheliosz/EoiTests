@@ -28,7 +28,7 @@ public class ExtractedEngagementDataTest extends Scenario {
 
         for (String id : ids) {
             try {
-                engagementsPage.searchForEnagagementOnGridById(id);
+                engagementsPage.searchForEngagementOnGridById(id);
                 assertEquals(engagementsPage.foundEngagementId(), id);
             } catch (AssertionError error) {
                 System.out.println("ID: " + id + " | " + error);
@@ -52,7 +52,7 @@ public class ExtractedEngagementDataTest extends Scenario {
 
             try {
                 String id = ids.get(i);
-                engagementsPage.searchForEnagagementOnGridById(id);
+                engagementsPage.searchForEngagementOnGridById(id);
                 String name = names.get(i);
                 assertEquals(engagementsPage.foundEngagementName().toUpperCase(), name.toUpperCase());
             } catch (AssertionError error) {
@@ -79,7 +79,7 @@ public class ExtractedEngagementDataTest extends Scenario {
             String objective = null;
             try {
                 String id = ids.get(i);
-                engagementsPage.searchForEnagagementOnGridById(id);
+                engagementsPage.searchForEngagementOnGridById(id);
                 engagementsPage.selectFoundEngagement();
                 engagementsPage.openEditPopUp();
                 objective = objectives.get(i);
@@ -116,7 +116,7 @@ public class ExtractedEngagementDataTest extends Scenario {
             String scope = null;
             try {
                 String id = ids.get(i);
-                engagementsPage.searchForEnagagementOnGridById(id);
+                engagementsPage.searchForEngagementOnGridById(id);
                 scope = scopes.get(i);
                 engagementsPage.selectFoundEngagement();
                 engagementsPage.openEditPopUp();
@@ -152,7 +152,7 @@ public class ExtractedEngagementDataTest extends Scenario {
 
             try {
                 String id = ids.get(i);
-                engagementsPage.searchForEnagagementOnGridById(id);
+                engagementsPage.searchForEngagementOnGridById(id);
                 String type = types.get(i);
                 assertEquals(engagementsPage.foundEngagementType().toUpperCase(), type.toUpperCase());
             } catch (AssertionError error) {
@@ -179,7 +179,7 @@ public class ExtractedEngagementDataTest extends Scenario {
 
             try {
                 String id = ids.get(i);
-                engagementsPage.searchForEnagagementOnGridById(id);
+                engagementsPage.searchForEngagementOnGridById(id);
                 String name = managementUnits.get(i);
                 assertEquals(engagementsPage.foundEngagementManagementUnit().toUpperCase(), name.toUpperCase());
             } catch (AssertionError error) {
@@ -206,7 +206,7 @@ public class ExtractedEngagementDataTest extends Scenario {
             String thematicField = null;
             try {
                 String id = ids.get(i);
-                engagementsPage.searchForEnagagementOnGridById(id);
+                engagementsPage.searchForEngagementOnGridById(id);
                 engagementsPage.selectFoundEngagement();
                 engagementsPage.openEditPopUp();
                 thematicField = thematicFields.get(i);
@@ -240,7 +240,7 @@ public class ExtractedEngagementDataTest extends Scenario {
 
             try {
                 String id = ids.get(i);
-                engagementsPage.searchForEnagagementOnGridById(id);
+                engagementsPage.searchForEngagementOnGridById(id);
                 String bla = blas.get(i);
                 assertEquals(engagementsPage.foundEngagementBla().toUpperCase(), bla.toUpperCase());
             } catch (AssertionError error) {
@@ -263,7 +263,7 @@ public class ExtractedEngagementDataTest extends Scenario {
 
         for (int i = 0; i < ids.size(); i++) {
             String engagementId = ids.get(i);
-            engagementsPage.searchForEnagagementOnGridById(engagementId);
+            engagementsPage.searchForEngagementOnGridById(engagementId);
             engagementsPage.selectFoundEngagement();
 
             List<String> partnersExtracted = (extract.getList("Partners"));
@@ -283,7 +283,6 @@ public class ExtractedEngagementDataTest extends Scenario {
                 try {
                     eoiId = bits[bits.length - 1].substring(0, bits[bits.length - 1].length() - 1);
                 } catch (StringIndexOutOfBoundsException e) {
-                    e.printStackTrace();
                     engagementsPage.takeScreenShot("StringIndexOutOfBoundsException");
                 }
 

@@ -2,6 +2,7 @@
 
 import PageObjectPattern.EngagementsPage;
 import PageObjectPattern.MainPage;
+import org.openqa.selenium.WebDriverException;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -20,15 +21,19 @@ public class ExtractedDeliverablesDataTest extends Scenario {
         MainPage mainPage = new MainPage(driver);
         mainPage.navigateToEngagementsSection();
 
-
         EngagementsPage engagementsPage = new EngagementsPage(driver);
 
         ReportReader extractIds = new ReportReader(filePath, "Deliverable", "Engagement ID");
         Set<String> engagementsIds = extractIds.getSet("Engagement ID");
         for (String engagementId : engagementsIds) {
 
-            engagementsPage.searchForEnagagementOnGridById(engagementId);
-            engagementsPage.selectFoundEngagement();
+            engagementsPage.searchForEngagementOnGridById(engagementId);
+            try {
+                engagementsPage.selectFoundEngagement();
+            } catch (WebDriverException e) {
+                e.printStackTrace();
+                engagementsPage.takeScreenShot(engagementId + "_searchForEnagagementOnGridById");
+            }
 
             ReportReader extractWpIds = new ReportReader(filePath, "Deliverable", "Engagement ID->Work Package ID");
             List<String> wpIds = extractWpIds.getList(engagementId + "->Work Package ID");
@@ -45,12 +50,13 @@ public class ExtractedDeliverablesDataTest extends Scenario {
                 List<String> extractedDeliverablesIds = extractDeliverablesIds.getList(engagementId + "->" + wpId + "->" + "Deliverable ID");
 
                 engagementsPage.closePopUp();
-                engagementsPage.closePopUp();
 
                 try {
                     assertTrue(eoiDeliverablesIds.containsAll(extractedDeliverablesIds));
                 } catch (AssertionError error) {
-                    System.out.println("\n" + error + "\nengagementId: " + engagementId + "\nwpId: " + wpId);
+                    System.out.println("\n" + error
+                            //+ "\nengagementId: " + engagementId + "\nwpId: " + wpId
+                    );
                 }
             }
             engagementsPage.engagementIdFilter.clear();
