@@ -1,5 +1,6 @@
 package PageObjectPattern;
 
+import Reports.ReportReader;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
@@ -11,6 +12,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 
 public class Page {
@@ -51,6 +53,17 @@ public class Page {
     public void takeScreenShot(String fileName) throws IOException, WebDriverException {
         File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
         FileUtils.copyFile(scrFile, new File("screenshots\\" + fileName + ".png"));
+    }
+
+    public List<String> getEngagementsIdsList(String filePath) throws IOException {
+        ReportReader extractIds = new ReportReader(filePath, "Engagement", "Engagement ID");
+        List<String> ids = (extractIds.getList("Engagement ID"));
+        return ids = (extractIds.getList("Engagement ID"));
+    }
+
+    public Set<String> getEngagementsIdsSet(String filePath) throws IOException {
+        ReportReader extractIds = new ReportReader(filePath, "WorkPackage", "Engagement ID");
+        return (extractIds.getSet("Engagement ID"));
     }
 
 }

@@ -60,7 +60,7 @@ public class EngagementsPage extends Page {
             WebDriverWait wait = new WebDriverWait(driver, 3);
             wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath("//table[1]/tbody[@class='rgrid rgridtree']/tr[contains(@id, 'row')]"), 1));
         } catch (Exception e) {
-            System.out.println("ENGAGEMENT NOT FOUND: " + engagementId);
+            System.out.println("ENGAGEMENT NOT FOUND: " + engagementId + "\n------------------------------");
             takeScreenShot("ENGAGEMENT_NOT_FOUND_" + engagementId);
         }
         loadingElement();
@@ -70,6 +70,15 @@ public class EngagementsPage extends Page {
         try {
             driver.findElement(By.xpath("//table[1]/tbody[@class='rgrid rgridtree']/tr[contains(@id, 'row')]/td[3]")).click();
         } catch (NoSuchElementException ignore) {
+        }
+    }
+
+    public void clearIdFilter() {
+        try {
+            engagementIdFilter.clear();
+        } catch (UnhandledAlertException e) {
+            driver.switchTo().alert().accept();
+            engagementIdFilter.clear();
         }
     }
 
@@ -206,7 +215,7 @@ public class EngagementsPage extends Page {
             driver.findElement(By.xpath("//*[text()='" + wpId + "']")).click();
             editEngagementDetailsButton.click();
             waitUntilVisibilityOfElement(fluidContainer, 5);
-        } catch (NoSuchElementException ignore) {
+        } catch (Exception ignore) {
         }
     }
 

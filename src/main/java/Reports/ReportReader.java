@@ -1,3 +1,5 @@
+package Reports;
+
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -23,7 +25,7 @@ import java.util.*;
  * 	String dataPath2 = "Brand->Model";
  *
  * 	try {
- * 		ReportReader report = new ReportReader(filePath, sheetName, dataPath);
+ * 		Reports.ReportReader report = new Reports.ReportReader(filePath, sheetName, dataPath);
  *
  * 		String result = report.getSingle("Furd->Scatter->Color");
  * 		System.out.println("Result: "+result);
@@ -46,7 +48,7 @@ public class ReportReader {
     public final String MAP_SEPARATOR = "->";
     public final String DATA_SEPARATOR = ",";
 
-    private final String NO_DATA_FOUND = "No data found. Collected data don't contains requested data. Please compare ReportReader dataPath with get method dataPath.";
+    private final String NO_DATA_FOUND = "No data found. Collected data don't contains requested data. Please compare Reports.ReportReader dataPath with get method dataPath.";
     private final String ILLEGAL_DATAPATH = "Constructor dataPath contains headers that don't exists in report";
 
     private Object report;
@@ -57,7 +59,7 @@ public class ReportReader {
      * @param dataPath  - Map oriented path to data.
      *                  <pre>	Consists of name of headers splited by '->' separator.
      *                  	Last section can have multiple data headers specified, separated by ',' separator,
-     *                  	used to receive multiple data with one ReportReader instance
+     *                  	used to receive multiple data with one Reports.ReportReader instance
      *                  	'*' symbol is used to map every column
      *
      *                   Example:

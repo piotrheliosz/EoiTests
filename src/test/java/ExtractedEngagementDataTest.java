@@ -1,5 +1,6 @@
 import PageObjectPattern.EngagementsPage;
 import PageObjectPattern.MainPage;
+import Reports.ReportReader;
 import org.openqa.selenium.TimeoutException;
 import org.testng.annotations.Test;
 
@@ -21,12 +22,9 @@ public class ExtractedEngagementDataTest extends Scenario {
         MainPage mainPage = new MainPage(driver);
         mainPage.navigateToEngagementsSection();
 
-        ReportReader extract = new ReportReader(filePath, "Engagement", "Engagement ID");
-        List<String> ids = (extract.getList("Engagement ID"));
-
         EngagementsPage engagementsPage = new EngagementsPage(driver);
 
-        for (String id : ids) {
+        for (String id : engagementsPage.getEngagementsIdsList(filePath)) {
             try {
                 engagementsPage.searchForEngagementOnGridById(id);
                 assertEquals(engagementsPage.foundEngagementId(), id);
@@ -43,7 +41,7 @@ public class ExtractedEngagementDataTest extends Scenario {
         mainPage.navigateToEngagementsSection();
 
         ReportReader extract = new ReportReader(filePath, "Engagement", "Engagement ID,Name");
-        List<String> ids = (extract.getList("Engagement ID"));
+        List<String> ids = mainPage.getEngagementsIdsList(filePath);
         List<String> names = (extract.getList("Name"));
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
