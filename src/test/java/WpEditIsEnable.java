@@ -33,7 +33,8 @@ public class WpEditIsEnable extends Scenario {
                 try {
                     engagementsPage.editWpFoundById(wpId);
                     engagementsPage.closePopUp();
-                } catch (UnhandledAlertException e) {
+                } catch (Exception e) {
+                    e.getStackTrace();
                     System.out.println(++numberOfAlerts + ". ALERT: " + driver.switchTo().alert().getText());
                     driver.switchTo().alert().accept();
                     System.out.println("Engagement ID: " + engagementId + "\nWP ID: " + wpId + "\n");

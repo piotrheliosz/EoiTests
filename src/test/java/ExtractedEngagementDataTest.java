@@ -210,9 +210,9 @@ public class ExtractedEngagementDataTest extends Scenario {
                 engagementsPage.selectFoundEngagement();
                 engagementsPage.openEditPopUp();
                 thematicField = thematicFields.get(i);
-                if (!engagementsPage.foundEngagementType().contains("BCS")) {
+                //if (!engagementsPage.foundEngagementType().contains("BCS")) {
                     assertEquals(engagementsPage.getThematicField(), thematicField);
-                }
+                //}
             } catch (AssertionError error) {
                 if (engagementsPage.getThematicField().equals("") || !ids.get(i).contains("ENG")) {
                     System.out.println("ID: " + ids.get(i) + " | java.lang.AssertionError" +

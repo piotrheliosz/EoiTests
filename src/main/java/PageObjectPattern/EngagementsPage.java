@@ -51,17 +51,17 @@ public class EngagementsPage extends Page {
     private WebElement wpDescTextArea;
 
     @FindBy(xpath = "//*[text()='View']")
-    WebElement viewButton;
+    private WebElement viewButton;
 
-    public void searchForEngagementOnGridById(String id) throws InterruptedException {
+    public void searchForEngagementOnGridById(String engagementId) throws InterruptedException, IOException {
         waitUntilVisibilityOfElement(engagementIdFilter, 10);
-        engagementIdFilter.sendKeys(id);
-        WebDriverWait wait = new WebDriverWait(driver, 5);
+        engagementIdFilter.sendKeys(engagementId);
         try {
+            WebDriverWait wait = new WebDriverWait(driver, 3);
             wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath("//table[1]/tbody[@class='rgrid rgridtree']/tr[contains(@id, 'row')]"), 1));
         } catch (Exception e) {
-            e.getStackTrace();
-            System.out.println("Engagement ID: " + id);
+            System.out.println("ENGAGEMENT NOT FOUND: " + engagementId);
+            takeScreenShot("ENGAGEMENT_NOT_FOUND_" + engagementId);
         }
         loadingElement();
     }
@@ -142,10 +142,18 @@ public class EngagementsPage extends Page {
         }
     }
 
+    public String getWpDescription() {
+        try {
+            waitUntilVisibilityOfElement(wpDescTextArea, 5);
+            return wpDescTextArea.getAttribute("value");
+        } catch (Exception e) {
+            return "NOT_FOND";
+        }
+    }
+
     public List<String> foundEngagementPartners() throws InterruptedException {
         List<String> partnersList = new ArrayList<String>();
-        List<WebElement> partnersOnGrid = driver.findElements(By.xpath("//table/tbody[@class='rgrid rgridlist']/tr/td[1]"));
-        for (WebElement partnerRow : partnersOnGrid) {
+        for (WebElement partnerRow : driver.findElements(By.xpath("//table/tbody[@class='rgrid rgridlist']/tr/td[1]"))) {
             String partner = partnerRow.getText();
             partnersList.add(partner);
         }
@@ -157,8 +165,7 @@ public class EngagementsPage extends Page {
             waitUntilVisibilityOfElement(closePopUp, 5);
             closePopUp.click();
             loadingElement();
-        } catch (WebDriverException e) {
-            takeScreenShot("closePopUp");
+        } catch (Exception ignore) {
         }
     }
 
@@ -171,10 +178,6 @@ public class EngagementsPage extends Page {
                 waitUntilVisibilityOfElement(closePopUp, 10);
             } catch (TimeoutException e) {
                 takeScreenShot("openEditPopUp");
-                waitUntilVisibilityOfElement(editEngagementButton, 10);
-                editEngagementButton.click();
-                loadingElement();
-                waitUntilVisibilityOfElement(closePopUp, 10);
             }
         } catch (UnhandledAlertException e) {
             System.out.println(driver.switchTo().alert().getText());
@@ -196,16 +199,15 @@ public class EngagementsPage extends Page {
     }
 
     public void editWpFoundById(String wpId) {
-        waitUntilVisibilityOfElement(wpTab, 5);
-        wpTab.click();
-        loadingElement();
-        driver.findElement(By.xpath("//*[text()='" + wpId + "']")).click();
-        editEngagementDetailsButton.click();
-        waitUntilVisibilityOfElement(fluidContainer, 5);
-    }
-
-    public String getWpDesc() {
-        return wpDescTextArea.getAttribute("value");
+        try {
+            waitUntilVisibilityOfElement(wpTab, 5);
+            wpTab.click();
+            loadingElement();
+            driver.findElement(By.xpath("//*[text()='" + wpId + "']")).click();
+            editEngagementDetailsButton.click();
+            waitUntilVisibilityOfElement(fluidContainer, 5);
+        } catch (NoSuchElementException ignore) {
+        }
     }
 
     public boolean footedIsDisplayed() {
@@ -220,11 +222,17 @@ public class EngagementsPage extends Page {
         driver.findElement(By.xpath("//span[contains(@onclick, 'moveNext')]")).click();
     }
 
-    public String getWpLeadingPartner(String wpId) {
-        waitUntilVisibilityOfElement(wpTab, 5);
-        wpTab.click();
-        loadingElement();
-        return driver.findElement(By.xpath("//*[text()='" + wpId + "']/../td[3]")).getText();
+    public String getWpLeadingPartner(String wpId) throws IOException {
+        try {
+            waitUntilVisibilityOfElement(wpTab, 5);
+            wpTab.click();
+            loadingElement();
+            return driver.findElement(By.xpath("//*[text()='" + wpId + "']/../td[3]")).getText();
+        } catch (Exception e) {
+            e.printStackTrace();
+            takeScreenShot(wpId + "_wpId_NoSuchElementException");
+            return "";
+        }
     }
 
     public List<String> getPartnerListsInWp() throws IOException {
