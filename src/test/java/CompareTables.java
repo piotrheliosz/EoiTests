@@ -3,11 +3,9 @@ import jxl.read.biff.BiffException;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.testng.AssertJUnit.assertEquals;
 
 public class CompareTables {
@@ -15,60 +13,39 @@ public class CompareTables {
     @Test
     public void deliverablesShouldBeExtracted() throws IOException, BiffException {
 
-        //EXTRACT DATA
-        String extractPath = "extracts\\KISSExtract_Deliverable_BP2017Amendment.xls";
+        //EXTRACTED DATA
+        String extractDataPath = "extracts\\KISSExtract_Deliverable_BP2017Amendment.xls";
 
-        ReportReader extractWpId = new ReportReader
-                (extractPath, "Deliverable", "Work Package ID");
-        ReportReader extractEngagementId = new ReportReader
-                (extractPath, "Deliverable", "Work Package ID->Engagement ID");
         ReportReader extractDeliverableIds = new ReportReader
-                (extractPath, "Deliverable", "Work Package ID->Deliverable ID");
+                (extractDataPath, "Deliverable", "Deliverable ID");
         ReportReader extractDeliverableTitles = new ReportReader
-                (extractPath, "Deliverable", "Work Package ID->Title");
+                (extractDataPath, "Deliverable", "Deliverable ID->Title");
 
         //EOI DATA
-        String myDataPath = "C:\\workspace\\EoiTests\\EOI_deliverables_report.xls";
+        String eioDataPath = "C:\\workspace\\EoiTests\\deliverables_result.xls";
 
         ReportReader eoiDeliverablesIds = new ReportReader
-                (myDataPath, "result", "Work Package ID->Deliverables IDs");
+                (eioDataPath, "deliverables_result", "Deliverable ID");
         ReportReader eoiDeliverablesTitles = new ReportReader
-                (myDataPath, "result", "Work Package ID->Deliverables Titles");
+                (eioDataPath, "deliverables_result", "Deliverable ID->Deliverable Title");
 
-        int row = 0;
-        Set<String> wpIds = extractWpId.getSet("Work Package ID");
-        for (String wpId : wpIds) {
+        for (String extractedDeliverableId : extractDeliverableIds.getList("Deliverable ID")) {
 
-            String engagementId = extractEngagementId.getSingle(wpId + "->Engagement ID");
-
-            List<String> eoiExtractedDeliverablesIds = new ArrayList<String>();
+            List<String> eoiDeliverablesIdsList = eoiDeliverablesIds.getList("Deliverable ID");
             try {
-                String[] eoiDeliverablesIdsCollection = eoiDeliverablesIds.getSingle(wpId + "->Deliverables IDs").split(",");
-                eoiExtractedDeliverablesIds.addAll(Arrays.asList(eoiDeliverablesIdsCollection));
-                //System.out.println(++row + ".\nwpId: " + wpId + " | eoiExtractedDeliverablesIds: " + eoiExtractedDeliverablesIds);
-            } catch (RuntimeException e) {
-                System.out.println("Engagement Id: " + engagementId + "\nNo data found: wpId " + wpId);
+                assertTrue(eoiDeliverablesIdsList.contains(extractedDeliverableId));
+            } catch (AssertionError e) {
+                System.out.println("extractedDeliverableId: " + extractedDeliverableId);
             }
-            List<String> extractedDeliverablesIds = extractDeliverableIds.getList(wpId + "->Deliverable ID");
-            //System.out.println("wpId: " + wpId + " | extractedDeliverablesIds: " + extractedDeliverablesIds);
 
-            List<String> extractedDeliverablesTitles = extractDeliverableTitles.getList(wpId + "->Title");
-
-            List<String> eoiExtractedDeliverablesTitles = new ArrayList<String>();
-            String[] eoiDeliverablesTitlesCollection = eoiDeliverablesTitles.getSingle(wpId + "->Deliverables Titles").split("@");
-            eoiExtractedDeliverablesTitles.addAll(Arrays.asList(eoiDeliverablesTitlesCollection));
-
+            String extractedTitle = extractDeliverableTitles.getSingle(extractedDeliverableId + "->Title");
+            String eoiTitle = eoiDeliverablesTitles.getSingle(extractedDeliverableId + "->Deliverable Title");
             try {
-                assertEquals(extractedDeliverablesIds.size(), eoiExtractedDeliverablesIds.size());
-                for (int i = 0; i < extractedDeliverablesIds.size(); ++i) {
-                    assertEquals(eoiExtractedDeliverablesIds.get(i).trim(), extractedDeliverablesIds.get(i).trim());
-                    assertEquals(eoiExtractedDeliverablesTitles.get(i).trim(), extractedDeliverablesTitles.get(i).trim());
-                }
-            } catch (AssertionError error) {
-                System.out.println(error
-                        + "\nEngagement Id: " + engagementId
-                        + "\nwpId: " + wpId + "\nextractedDeliverablesIds: " + extractedDeliverablesIds
-                        + "\neoiExtractedDeliverablesIds: " + eoiExtractedDeliverablesIds + "\n");
+                assertEquals(extractedTitle, eoiTitle);
+            } catch (AssertionError e) {
+                System.out.println("\nextractedDeliverableId: " + extractedDeliverableId
+                        + "\nextractedTitle: " + extractedTitle
+                        + "\neoiTitle: " + eoiTitle);
             }
         }
     }
