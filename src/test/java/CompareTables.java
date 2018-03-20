@@ -29,23 +29,68 @@ public class CompareTables {
         ReportReader eoiDeliverablesTitles = new ReportReader
                 (eioDataPath, "deliverables_result", "Deliverable ID->Deliverable Title");
 
-        for (String extractedDeliverableId : extractDeliverableIds.getList("Deliverable ID")) {
+        List<String> extractDeliverableIdsList = extractDeliverableIds.getList("Deliverable ID");
 
-            List<String> eoiDeliverablesIdsList = eoiDeliverablesIds.getList("Deliverable ID");
+        for (String extractedDeliverableId : extractDeliverableIdsList) {
+
             try {
-                assertTrue(eoiDeliverablesIdsList.contains(extractedDeliverableId));
-            } catch (AssertionError e) {
-                System.out.println("extractedDeliverableId: " + extractedDeliverableId);
+                assertTrue(eoiDeliverablesIds.getList("Deliverable ID").contains(extractedDeliverableId));
+            } catch (AssertionError error) {
+                System.out.println("\nMissing Extracted Deliverable Id: " + extractedDeliverableId);
             }
 
             String extractedTitle = extractDeliverableTitles.getSingle(extractedDeliverableId + "->Title");
             String eoiTitle = eoiDeliverablesTitles.getSingle(extractedDeliverableId + "->Deliverable Title");
             try {
-                assertEquals(extractedTitle, eoiTitle);
+                assertEquals(extractedTitle.trim().replaceAll(" +", " "),
+                        eoiTitle.trim().replaceAll(" +", " "));
             } catch (AssertionError e) {
-                System.out.println("\nextractedDeliverableId: " + extractedDeliverableId
-                        + "\nextractedTitle: " + extractedTitle
-                        + "\neoiTitle: " + eoiTitle);
+                System.out.println("\nExtracted Deliverable Id: " + extractedDeliverableId
+                        + "\nExtracted Title: " + extractedTitle
+                        + "\nEoi Title: " + eoiTitle);
+            }
+        }
+    }
+
+    @Test
+    public void objectiveShouldBeExtracted() throws IOException {
+
+        //EXTRACTED DATA
+        String extractDataPath = "extracts\\KISSExtract_Objective_BP2017Amendment.xls";
+
+        ReportReader extractObjectiveIds = new ReportReader
+                (extractDataPath, "Objective", "Objective ID");
+        ReportReader extractObjectiveTitles = new ReportReader
+                (extractDataPath, "Objective", "Objective ID->Title");
+
+        //EOI DATA
+        String eioDataPath = "C:\\workspace\\EoiTests\\objective_result.xls";
+
+        ReportReader eoiObjectiveIds = new ReportReader
+                (eioDataPath, "objective_result", "Objective ID");
+        ReportReader eoiObjectiveTitles = new ReportReader
+                (eioDataPath, "objective_result", "Objective ID->Objective Title");
+
+        List<String> extractObjectiveIdsList = extractObjectiveIds.getList("Objective ID");
+
+        for (String extractedObjectiveId : extractObjectiveIdsList) {
+
+            try {
+                assertTrue(eoiObjectiveIds.getList("Objective ID").contains(extractedObjectiveId));
+            } catch (AssertionError error) {
+                System.out.println("Missing Extracted Objective Id: " + extractedObjectiveId);
+            }
+
+            String extractedTitle = extractObjectiveTitles.getSingle(extractedObjectiveId + "->Title");
+            String eoiTitle = eoiObjectiveTitles.getSingle(extractedObjectiveId + "->Objective Title");
+
+            try{
+                assertEquals(extractedTitle.trim().replaceAll(" +", " "),
+                        eoiTitle.trim().replaceAll(" +", " "));
+            }catch (AssertionError error){
+                System.out.println("\nExtracted Objective Id: " + extractedObjectiveId
+                        + "\nExtracted Title: " + extractedTitle
+                        + "\nEoi Title: " + eoiTitle);
             }
         }
     }
