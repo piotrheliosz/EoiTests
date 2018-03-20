@@ -13,7 +13,7 @@ public class PartnersPage extends Page {
     private WebElement addPartnerDetailsButton;
 
     public void clickToAddPartnerDetails() {
-        waitUntilVisibilityOfElement(addPartnerDetailsButton, 30);
+        waitUntilVisibility(addPartnerDetailsButton, 30);
         addPartnerDetailsButton.click();
     }
 }

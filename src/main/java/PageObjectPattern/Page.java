@@ -25,7 +25,7 @@ public class Page {
 
     private static File configFile = new File("config.properties");
 
-    void waitUntilVisibilityOfElement(WebElement element, int timeout) {
+    void waitUntilVisibility(WebElement element, int timeout) {
         loadingElement();
         WebDriverWait wait = new WebDriverWait(driver, timeout);
         wait.until(ExpectedConditions.visibilityOf(element));

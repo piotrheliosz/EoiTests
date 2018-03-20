@@ -18,12 +18,12 @@ public class MainPage extends Page {
     }
 
     public void navigateToPartnerSection() {
-        waitUntilVisibilityOfElement(outerContainer, 30);
+        waitUntilVisibility(outerContainer, 30);
         driver.navigate().to(getCredentials("baseUrl") + "/portal/kicinnoenergy-acc/page/all-partners/");
     }
 
     public void navigateToEngagementsSection() {
-        waitUntilVisibilityOfElement(outerContainer, 30);
+        waitUntilVisibility(outerContainer, 30);
         if (!driver.getCurrentUrl().equals(getCredentials("baseUrl") + "/portal/kicinnoenergy-acc/page/engagements-overview/")) {
             driver.navigate().to(getCredentials("baseUrl") + "/portal/kicinnoenergy-acc/page/engagements-overview/");
         }

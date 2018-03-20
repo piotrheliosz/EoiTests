@@ -54,7 +54,7 @@ public class EngagementsPage extends Page {
     private WebElement viewButton;
 
     public void searchForEngagementOnGridById(String engagementId) throws InterruptedException, IOException {
-        waitUntilVisibilityOfElement(engagementIdFilter, 10);
+        waitUntilVisibility(engagementIdFilter, 10);
         engagementIdFilter.sendKeys(engagementId);
         try {
             WebDriverWait wait = new WebDriverWait(driver, 3);
@@ -126,7 +126,7 @@ public class EngagementsPage extends Page {
 
     public String getScope() throws IOException {
         try {
-            waitUntilVisibilityOfElement(scopeTextarea, 5);
+            waitUntilVisibility(scopeTextarea, 5);
             return scopeTextarea.getAttribute("value");
         } catch (Exception e) {
             return "NOT_FOND";
@@ -135,7 +135,7 @@ public class EngagementsPage extends Page {
 
     public String getThematicField() {
         try {
-            waitUntilVisibilityOfElement(thematicField, 5);
+            waitUntilVisibility(thematicField, 5);
             return thematicField.getText();
         } catch (Exception e) {
             return "NOT_FOND";
@@ -144,7 +144,7 @@ public class EngagementsPage extends Page {
 
     public String getObjective() {
         try {
-            waitUntilVisibilityOfElement(objectiveTextarea, 5);
+            waitUntilVisibility(objectiveTextarea, 5);
             return objectiveTextarea.getAttribute("value");
         } catch (Exception e) {
             return "NOT_FOND";
@@ -153,7 +153,7 @@ public class EngagementsPage extends Page {
 
     public String getWpDescription() {
         try {
-            waitUntilVisibilityOfElement(wpDescTextArea, 5);
+            waitUntilVisibility(wpDescTextArea, 5);
             return wpDescTextArea.getAttribute("value");
         } catch (Exception e) {
             return "NOT_FOND";
@@ -171,7 +171,7 @@ public class EngagementsPage extends Page {
 
     public void closePopUp() throws IOException {
         try {
-            waitUntilVisibilityOfElement(closePopUp, 5);
+            waitUntilVisibility(closePopUp, 5);
             closePopUp.click();
             loadingElement();
         } catch (Exception ignore) {
@@ -181,10 +181,10 @@ public class EngagementsPage extends Page {
     public void openEditPopUp() throws IOException {
         try {
             try {
-                waitUntilVisibilityOfElement(editEngagementButton, 10);
+                waitUntilVisibility(editEngagementButton, 10);
                 editEngagementButton.click();
                 loadingElement();
-                waitUntilVisibilityOfElement(closePopUp, 10);
+                waitUntilVisibility(closePopUp, 10);
             } catch (TimeoutException e) {
                 takeScreenShot("openEditPopUp");
             }
@@ -196,7 +196,7 @@ public class EngagementsPage extends Page {
 
     public List<WebElement> getWpTitlesList() throws IOException {
         WebDriverWait wait = new WebDriverWait(driver, 30);
-        waitUntilVisibilityOfElement(wpTab, 5);
+        waitUntilVisibility(wpTab, 5);
         wpTab.click();
         loadingElement();
         try {
@@ -209,12 +209,12 @@ public class EngagementsPage extends Page {
 
     public void editWpFoundById(String wpId) {
         try {
-            waitUntilVisibilityOfElement(wpTab, 5);
+            waitUntilVisibility(wpTab, 5);
             wpTab.click();
             loadingElement();
             driver.findElement(By.xpath("//*[text()='" + wpId + "']")).click();
             editEngagementDetailsButton.click();
-            waitUntilVisibilityOfElement(fluidContainer, 5);
+            waitUntilVisibility(fluidContainer, 5);
         } catch (Exception ignore) {
         }
     }
@@ -233,7 +233,7 @@ public class EngagementsPage extends Page {
 
     public String getWpLeadingPartner(String wpId) throws IOException {
         try {
-            waitUntilVisibilityOfElement(wpTab, 5);
+            waitUntilVisibility(wpTab, 5);
             wpTab.click();
             loadingElement();
             return driver.findElement(By.xpath("//*[text()='" + wpId + "']/../td[3]")).getText();
@@ -264,7 +264,7 @@ public class EngagementsPage extends Page {
         loadingElement();
         JavascriptExecutor executor = (JavascriptExecutor) driver;
         executor.executeScript("arguments[0].scrollIntoView(true);", viewButton);
-        waitUntilVisibilityOfElement(viewButton, 10);
+        waitUntilVisibility(viewButton, 10);
         viewButton.click();
         loadingElement();
     }
