@@ -30,7 +30,6 @@ public class CompareObjectives {
                 (eioDataPath, "objective_result", "Objective ID->Objective Title");
 
         List<String> extractObjectiveIdsList = extractObjectiveIds.getList("Objective ID");
-
         for (String extractedObjectiveId : extractObjectiveIdsList) {
 
             try {

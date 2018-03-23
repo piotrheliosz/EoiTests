@@ -27,15 +27,13 @@ public class Page {
 
     void waitUntilVisibility(WebElement element, int timeout) {
         loadingElement();
-        WebDriverWait wait = new WebDriverWait(driver, timeout);
-        wait.until(ExpectedConditions.visibilityOf(element));
+        new WebDriverWait(driver, timeout).until(ExpectedConditions.visibilityOf(element));
         loadingElement();
     }
 
     void loadingElement() {
-        WebDriverWait wait = new WebDriverWait(driver, 20);
-        wait.until(ExpectedConditions.invisibilityOfAllElements(
-                driver.findElements(By.xpath("//div[contains(@class, 'loader')]"))));
+        new WebDriverWait(driver, 20).until(ExpectedConditions.invisibilityOfAllElements
+                (driver.findElements(By.xpath("//div[contains(@class, 'loader')]"))));
     }
 
     public static String getCredentials(String credential) {
@@ -57,11 +55,15 @@ public class Page {
 
     public List<String> getEngagementsIdsList(String filePath) throws IOException {
         ReportReader extractIds = new ReportReader(filePath, "Engagement", "Engagement ID");
-        List<String> ids = (extractIds.getList("Engagement ID"));
-        return ids = (extractIds.getList("Engagement ID"));
+        return (extractIds.getList("Engagement ID"));
     }
 
     public Set<String> getEngagementsIdsSet(String filePath) throws IOException {
+        ReportReader extractIds = new ReportReader(filePath, "Engagement", "Engagement ID");
+        return (extractIds.getSet("Engagement ID"));
+    }
+
+    public Set<String> getWpEngagementsIdsSet(String filePath) throws IOException {
         ReportReader extractIds = new ReportReader(filePath, "WorkPackage", "Engagement ID");
         return (extractIds.getSet("Engagement ID"));
     }

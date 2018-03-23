@@ -1,15 +1,12 @@
 import PageObjectPattern.EngagementsPage;
-import PageObjectPattern.MainPage;
 import Reports.ReportReader;
 import org.openqa.selenium.UnhandledAlertException;
-import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 import static org.testng.Assert.assertTrue;
 import static org.testng.AssertJUnit.assertEquals;
@@ -20,30 +17,27 @@ public class ExtractedWpDataTest extends Scenario {
 
     @Test(enabled = true, priority = 0)
     public void compareWpTitle() throws InterruptedException, IOException {
-        ReportReader extractIds = new ReportReader(filePath, "WorkPackage", "Engagement ID");
         ReportReader extractTitles = new ReportReader(filePath, "WorkPackage", "Engagement ID->Title");
 
-        for (String id : extractIds.getSet("Engagement ID")) {
-            EngagementsPage engagementsPage = new EngagementsPage(driver);
+        EngagementsPage engagementsPage = new EngagementsPage(driver);
+
+        for (String id : engagementsPage.getWpEngagementsIdsSet(filePath)) {
             engagementsPage.searchForEngagementOnGridById(id);
             engagementsPage.selectFoundEngagement();
 
             List<String> titlesExtracted = new ArrayList<String>();
             for (String titleExtracted : extractTitles.getList(id + "->Title")) {
-                titlesExtracted.add(titleExtracted.trim());
-            }
-            List<String> titlesEOI = new ArrayList<String>();
-            for (WebElement titleEoi : engagementsPage.getWpTitlesList()) {
-                titlesEOI.add(titleEoi.getText().trim());
+                titlesExtracted.add(titleExtracted.trim().replaceAll(" +", " "));
             }
 
             try {
-                assertEquals(titlesEOI.size(), titlesExtracted.size());
-                assertTrue(titlesEOI.containsAll(titlesExtracted));
+                assertEquals(engagementsPage.getWpTitlesList().size(), titlesExtracted.size());
+                assertTrue(engagementsPage.getWpTitlesList().containsAll(titlesExtracted));
             } catch (AssertionError error) {
                 System.out.println(error + "\nEngagement Id: " + id
                         + "\nExtracted KISS titles - number: " + titlesExtracted.size() + ": " + titlesExtracted
-                        + "\nEOI titles - number: " + titlesEOI.size() + ": " + titlesEOI + "\n");
+                        + "\nEOI titles - number: " + engagementsPage.getWpTitlesList().size()
+                        + ": " + engagementsPage.getWpTitlesList() + "\n");
             }
             engagementsPage.clearIdFilter();
         }
@@ -51,12 +45,12 @@ public class ExtractedWpDataTest extends Scenario {
 
     @Test(enabled = true, priority = 1)
     public void compareWpDescription() throws InterruptedException, IOException {
-        ReportReader extractIds = new ReportReader(filePath, "WorkPackage", "Engagement ID");
         ReportReader extractWpIds = new ReportReader(filePath, "WorkPackage", "Engagement ID->Work Package ID");
         ReportReader extractDesc = new ReportReader(filePath, "WorkPackage", "Engagement ID->Work Package ID->Description");
 
-        for (String engagementId : extractIds.getSet("Engagement ID")) {
-            EngagementsPage engagementsPage = new EngagementsPage(driver);
+        EngagementsPage engagementsPage = new EngagementsPage(driver);
+
+        for (String engagementId : engagementsPage.getEngagementsIdsList(filePath)) {
             engagementsPage.searchForEngagementOnGridById(engagementId);
             engagementsPage.selectFoundEngagement();
 
@@ -77,6 +71,7 @@ public class ExtractedWpDataTest extends Scenario {
                     }
                     engagementsPage.closePopUp();
                 } catch (UnhandledAlertException e) {
+                    System.out.println(driver.switchTo().alert().getText());
                     driver.switchTo().alert().accept();
                 }
             }
@@ -86,13 +81,13 @@ public class ExtractedWpDataTest extends Scenario {
 
     @Test(enabled = true, priority = 2)
     public void compareWpPartners() throws InterruptedException, IOException {
-        ReportReader extractIds = new ReportReader(filePath, "WorkPackage", "Engagement ID");
         ReportReader extractWpIds = new ReportReader(filePath, "WorkPackage", "Engagement ID->Work Package ID");
         ReportReader extractWpPartners = new ReportReader(filePath, "WorkPackage", "Engagement ID->Work Package ID->Partners");
 
-        for (String engagementId : extractIds.getSet("Engagement ID")) {
+        EngagementsPage engagementsPage = new EngagementsPage(driver);
 
-            EngagementsPage engagementsPage = new EngagementsPage(driver);
+        for (String engagementId : engagementsPage.getEngagementsIdsList(filePath)) {
+
             engagementsPage.searchForEngagementOnGridById(engagementId);
             engagementsPage.selectFoundEngagement();
 
@@ -131,14 +126,10 @@ public class ExtractedWpDataTest extends Scenario {
 
     @Test(enabled = true, priority = 3)
     public void compareLeadingPartner() throws IOException, InterruptedException {
-        MainPage mainPage = new MainPage(driver);
-        mainPage.navigateToEngagementsSection();
+        EngagementsPage engagementsPage = new EngagementsPage(driver);
 
-        ReportReader extractIds = new ReportReader(filePath, "WorkPackage", "Engagement ID");
-        Set<String> ids = (extractIds.getSet("Engagement ID"));
-        for (String engagementId : ids) {
+        for (String engagementId : engagementsPage.getWpEngagementsIdsSet(filePath)) {
 
-            EngagementsPage engagementsPage = new EngagementsPage(driver);
             engagementsPage.searchForEngagementOnGridById(engagementId);
             engagementsPage.selectFoundEngagement();
 

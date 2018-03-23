@@ -1,6 +1,7 @@
 import PageObjectPattern.EngagementsPage;
 import PageObjectPattern.MainPage;
 import Reports.ReportReader;
+import org.openqa.selenium.UnhandledAlertException;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -11,29 +12,26 @@ public class WpEditIsEnable extends Scenario {
 
 
     @Test
-    public void wpEditShouldBeEnable() throws InterruptedException, IOException {
+    public void alertShouldNotBeEnable() throws InterruptedException, IOException {
 
         String filePath = "extracts\\KISSExtract_WorkPackage_BP2017Amendment.xls";
         int numberOfAlerts = 0;
 
-        MainPage mainPage = new MainPage(driver);
-        mainPage.navigateToEngagementsSection();
+        EngagementsPage engagementsPage = new EngagementsPage(driver);
 
-        ReportReader extractIds = new ReportReader(filePath, "WorkPackage", "Engagement ID");
-        Set<String> engagementsIds = (extractIds.getSet("Engagement ID"));
-        for (String engagementId : engagementsIds) {
+        for (String engagementId : engagementsPage.getEngagementsIdsSet(filePath)) {
 
-            EngagementsPage engagementsPage = new EngagementsPage(driver);
             engagementsPage.searchForEngagementOnGridById(engagementId);
             engagementsPage.selectFoundEngagement();
 
             ReportReader extractWpId = new ReportReader(filePath, "WorkPackage", "Engagement ID->Work Package ID");
             List<String> wpIdList = extractWpId.getList(engagementId + "->Work Package ID");
+
             for (String wpId : wpIdList) {
                 try {
                     engagementsPage.editWpFoundById(wpId);
                     engagementsPage.closePopUp();
-                } catch (Exception e) {
+                } catch (UnhandledAlertException e) {
                     e.getStackTrace();
                     System.out.println(++numberOfAlerts + ". ALERT: " + driver.switchTo().alert().getText());
                     driver.switchTo().alert().accept();

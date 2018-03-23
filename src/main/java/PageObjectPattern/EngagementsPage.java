@@ -53,13 +53,23 @@ public class EngagementsPage extends Page {
     @FindBy(xpath = "//*[text()='View']")
     private WebElement viewButton;
 
+    @FindBy(xpath = "//div[@data-field='Engagement.Managers']//span[@class='input-group-addon icon text-main']")
+    private WebElement addManagerButton;
+
+    @FindBy(xpath = "//div[@data-field='Engagement.Managers']//input")
+    private WebElement addManagerInput;
+
+    @FindBy(xpath = "//div[@event='Save' or @event='Done']")
+    private WebElement saveEvent;
+
     public void searchForEngagementOnGridById(String engagementId) throws InterruptedException, IOException {
         waitUntilVisibility(engagementIdFilter, 10);
         engagementIdFilter.sendKeys(engagementId);
         try {
-            WebDriverWait wait = new WebDriverWait(driver, 3);
-            wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath("//table[1]/tbody[@class='rgrid rgridtree']/tr[contains(@id, 'row')]"), 1));
-        } catch (Exception e) {
+            new WebDriverWait(driver, 10)
+                    .until(ExpectedConditions.numberOfElementsToBe
+                            (By.xpath("//table[1]/tbody[@class='rgrid rgridtree']/tr[contains(@id, 'row')]"), 1));
+        } catch (WebDriverException e) {
             System.out.println("ENGAGEMENT NOT FOUND: " + engagementId + "\n------------------------------");
             takeScreenShot("ENGAGEMENT_NOT_FOUND_" + engagementId);
         }
@@ -69,7 +79,7 @@ public class EngagementsPage extends Page {
     public void selectFoundEngagement() {
         try {
             driver.findElement(By.xpath("//table[1]/tbody[@class='rgrid rgridtree']/tr[contains(@id, 'row')]/td[3]")).click();
-        } catch (NoSuchElementException ignore) {
+        } catch (Exception ignore) {
         }
     }
 
@@ -194,17 +204,21 @@ public class EngagementsPage extends Page {
         }
     }
 
-    public List<WebElement> getWpTitlesList() throws IOException {
-        WebDriverWait wait = new WebDriverWait(driver, 30);
+    public List<String> getWpTitlesList() throws IOException {
+        List<String> wpTitles = new ArrayList<String>();
         waitUntilVisibility(wpTab, 5);
         wpTab.click();
         loadingElement();
         try {
-            wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath("//table/tbody[@class='rgrid rgridlist']/tr/td[2]"), 0));
+            new WebDriverWait(driver, 5)
+                    .until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath("//table/tbody[@class='rgrid rgridlist']/tr/td[2]"), 0));
         } catch (TimeoutException e) {
             takeScreenShot("NO_WP_" + foundEngagementId());
         }
-        return driver.findElements(By.xpath("//table/tbody[@class='rgrid rgridlist']/tr/td[2]"));
+        for (WebElement element : driver.findElements(By.xpath("//table/tbody[@class='rgrid rgridlist']/tr/td[2]"))) {
+            wpTitles.add(element.getText().trim().replaceAll(" +", " "));
+        }
+        return wpTitles;
     }
 
     public void editWpFoundById(String wpId) {
@@ -267,5 +281,14 @@ public class EngagementsPage extends Page {
         waitUntilVisibility(viewButton, 10);
         viewButton.click();
         loadingElement();
+    }
+
+    public List<String> getEngagementManagesList() {
+        waitUntilVisibility(fluidContainer, 5);
+        List<String> engagementManagesList = new ArrayList<String>();
+        for (WebElement s : driver.findElements(By.xpath("//div[@coll-name='Engagement.Managers']//div[2]"))) {
+            engagementManagesList.add(s.getAttribute("textContent"));
+        }
+        return engagementManagesList;
     }
 }

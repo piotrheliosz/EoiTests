@@ -41,21 +41,21 @@ public class ExtractedEngagementDataTest extends Scenario {
         mainPage.navigateToEngagementsSection();
 
         ReportReader extract = new ReportReader(filePath, "Engagement", "Engagement ID,Name");
-        List<String> ids = mainPage.getEngagementsIdsList(filePath);
-        List<String> names = (extract.getList("Name"));
+        List<String> engagementsIds = mainPage.getEngagementsIdsList(filePath);
+        List<String> engagementsNames = (extract.getList("Name"));
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
 
-        for (int i = 0; i < ids.size(); i++) {
+        for (int i = 0; i < engagementsIds.size(); i++) {
 
             try {
-                String id = ids.get(i);
+                String id = engagementsIds.get(i);
                 engagementsPage.searchForEngagementOnGridById(id);
-                String name = names.get(i);
+                String name = engagementsNames.get(i);
                 assertEquals(engagementsPage.foundEngagementName().toUpperCase(), name.toUpperCase());
             } catch (AssertionError error) {
-                if (!ids.get(i).contains("ENG")) {
-                    System.out.println("ID: " + ids.get(i) + " | " + error);
+                if (!engagementsIds.get(i).contains("ENG")) {
+                    System.out.println("ID: " + engagementsIds.get(i) + " | " + error);
                 }
             }
             engagementsPage.engagementIdFilter.clear();
@@ -68,29 +68,31 @@ public class ExtractedEngagementDataTest extends Scenario {
         mainPage.navigateToEngagementsSection();
 
         ReportReader extract = new ReportReader(filePath, "Engagement", "Engagement ID,Objective");
-        List<String> ids = (extract.getList("Engagement ID"));
-        List<String> objectives = (extract.getList("Objective"));
+        List<String> engagementsIds = (extract.getList("Engagement ID"));
+        List<String> engagementsObjectives = (extract.getList("Objective"));
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
 
-        for (int i = 0; i < ids.size(); i++) {
+        for (int i = 0; i < engagementsIds.size(); i++) {
             String objective = null;
             try {
-                String id = ids.get(i);
+                String id = engagementsIds.get(i);
                 engagementsPage.searchForEngagementOnGridById(id);
                 engagementsPage.selectFoundEngagement();
                 engagementsPage.openEditPopUp();
-                objective = objectives.get(i);
+                objective = engagementsObjectives.get(i);
                 try {
                     assertEquals(engagementsPage.getObjective(), objective);
                 } catch (TimeoutException e) {
                     e.printStackTrace();
                     engagementsPage.takeScreenShot(id + " " + getClass().toString());
                 }
-            } catch (AssertionError error) {/**/
-                if (engagementsPage.getObjective().equals("") || !ids.get(i).contains("ENG")) {
-                    System.out.println("ID: " + ids.get(i) + " | java.lang.AssertionError" +
-                            "\nKISS EXTRACT: " + objective + "\nEOI: " + engagementsPage.getObjective() + "\n");
+            } catch (AssertionError error) {
+                if (engagementsPage.getObjective().equals("") || !engagementsIds.get(i).contains("ENG")) {
+                    System.out.println("ID: " + engagementsIds.get(i)
+                            //+ " | java.lang.AssertionError"
+                            //+ "\nKISS EXTRACT: " + objective + "\nEOI: " + engagementsPage.getObjective()
+                    );
                 }
             }
 
@@ -105,17 +107,17 @@ public class ExtractedEngagementDataTest extends Scenario {
         mainPage.navigateToEngagementsSection();
 
         ReportReader extract = new ReportReader(filePath, "Engagement", "Engagement ID,Scope");
-        List<String> ids = (extract.getList("Engagement ID"));
-        List<String> scopes = (extract.getList("Scope"));
+        List<String> engagementsIds = (extract.getList("Engagement ID"));
+        List<String> engagementsScopes = (extract.getList("Scope"));
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
 
-        for (int i = 0; i < ids.size(); i++) {
+        for (int i = 0; i < engagementsIds.size(); i++) {
             String scope = null;
             try {
-                String id = ids.get(i);
+                String id = engagementsIds.get(i);
                 engagementsPage.searchForEngagementOnGridById(id);
-                scope = scopes.get(i);
+                scope = engagementsScopes.get(i);
                 engagementsPage.selectFoundEngagement();
                 engagementsPage.openEditPopUp();
                 try {
@@ -125,8 +127,8 @@ public class ExtractedEngagementDataTest extends Scenario {
                     engagementsPage.takeScreenShot(id + " " + getClass().toString());
                 }
             } catch (AssertionError error) {
-                if (engagementsPage.getScope().equals("") || !ids.get(i).contains("ENG")) {
-                    System.out.println("ID: " + ids.get(i) + " | java.lang.AssertionError" +
+                if (engagementsPage.getScope().equals("") || !engagementsIds.get(i).contains("ENG")) {
+                    System.out.println("ID: " + engagementsIds.get(i) + " | java.lang.AssertionError" +
                             "\nKISS EXTRACT: " + scope + "\nEOI: " + engagementsPage.getScope() + "\n");
                 }
             }
@@ -141,21 +143,21 @@ public class ExtractedEngagementDataTest extends Scenario {
         mainPage.navigateToEngagementsSection();
 
         ReportReader extract = new ReportReader(filePath, "Engagement", "Engagement ID,Type");
-        List<String> ids = (extract.getList("Engagement ID"));
-        List<String> types = (extract.getList("Type"));
+        List<String> engagementsIds = (extract.getList("Engagement ID"));
+        List<String> engagementsTypes = (extract.getList("Type"));
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
 
-        for (int i = 0; i < ids.size(); i++) {
+        for (int i = 0; i < engagementsIds.size(); i++) {
 
             try {
-                String id = ids.get(i);
+                String id = engagementsIds.get(i);
                 engagementsPage.searchForEngagementOnGridById(id);
-                String type = types.get(i);
+                String type = engagementsTypes.get(i);
                 assertEquals(engagementsPage.foundEngagementType().toUpperCase(), type.toUpperCase());
             } catch (AssertionError error) {
-                if (engagementsPage.foundEngagementType().equals("") || !ids.get(i).contains("ENG")) {
-                    System.out.println("ID: " + ids.get(i) + " | " + error);
+                if (engagementsPage.foundEngagementType().equals("") || !engagementsIds.get(i).contains("ENG")) {
+                    System.out.println("ID: " + engagementsIds.get(i) + " | " + error);
                 }
             }
             engagementsPage.engagementIdFilter.clear();
@@ -168,21 +170,21 @@ public class ExtractedEngagementDataTest extends Scenario {
         mainPage.navigateToEngagementsSection();
 
         ReportReader extract = new ReportReader(filePath, "Engagement", "Engagement ID,Management Unit");
-        List<String> ids = (extract.getList("Engagement ID"));
-        List<String> managementUnits = (extract.getList("Management Unit"));
+        List<String> engagementsIds = (extract.getList("Engagement ID"));
+        List<String> engagementsManagementUnits = (extract.getList("Management Unit"));
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
 
-        for (int i = 0; i < ids.size(); i++) {
+        for (int i = 0; i < engagementsIds.size(); i++) {
 
             try {
-                String id = ids.get(i);
+                String id = engagementsIds.get(i);
                 engagementsPage.searchForEngagementOnGridById(id);
-                String name = managementUnits.get(i);
+                String name = engagementsManagementUnits.get(i);
                 assertEquals(engagementsPage.foundEngagementManagementUnit().toUpperCase(), name.toUpperCase());
             } catch (AssertionError error) {
-                if (engagementsPage.foundEngagementManagementUnit().equals("") || !ids.get(i).contains("ENG")) {
-                    System.out.println("ID: " + ids.get(i) + " | " + error);
+                if (engagementsPage.foundEngagementManagementUnit().equals("") || !engagementsIds.get(i).contains("ENG")) {
+                    System.out.println("ID: " + engagementsIds.get(i) + " | " + error);
                 }
             }
             engagementsPage.engagementIdFilter.clear();
@@ -195,29 +197,28 @@ public class ExtractedEngagementDataTest extends Scenario {
         mainPage.navigateToEngagementsSection();
 
         ReportReader extract = new ReportReader(filePath, "Engagement", "Engagement ID,Thematic Field");
-        List<String> ids = (extract.getList("Engagement ID"));
-        List<String> thematicFields = (extract.getList("Thematic Field"));
+        List<String> engagementsIds = (extract.getList("Engagement ID"));
+        List<String> engagementsThematicFields = (extract.getList("Thematic Field"));
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
 
-        for (int i = 0; i < ids.size(); i++) {
+        for (int i = 0; i < engagementsIds.size(); i++) {
             String thematicField = null;
             try {
-                String id = ids.get(i);
+                String id = engagementsIds.get(i);
                 engagementsPage.searchForEngagementOnGridById(id);
                 engagementsPage.selectFoundEngagement();
                 engagementsPage.openEditPopUp();
-                thematicField = thematicFields.get(i);
+                thematicField = engagementsThematicFields.get(i);
                 //if (!engagementsPage.foundEngagementType().contains("BCS")) {
-                    assertEquals(engagementsPage.getThematicField(), thematicField);
+                assertEquals(engagementsPage.getThematicField(), thematicField);
                 //}
             } catch (AssertionError error) {
-                if (engagementsPage.getThematicField().equals("") || !ids.get(i).contains("ENG")) {
-                    System.out.println("ID: " + ids.get(i) + " | java.lang.AssertionError" +
+                if (engagementsPage.getThematicField().equals("") || !engagementsIds.get(i).contains("ENG")) {
+                    System.out.println("ID: " + engagementsIds.get(i) + " | java.lang.AssertionError" +
                             "\nKISS EXTRACT: " + thematicField + "\nEOI: " + engagementsPage.getThematicField() + "\n");
                 }
             }
-
             engagementsPage.closePopUp();
             engagementsPage.engagementIdFilter.clear();
         }
@@ -229,21 +230,21 @@ public class ExtractedEngagementDataTest extends Scenario {
         mainPage.navigateToEngagementsSection();
 
         ReportReader extract = new ReportReader(filePath, "Engagement", "Engagement ID,Business Line Area");
-        List<String> ids = (extract.getList("Engagement ID"));
-        List<String> blas = (extract.getList("Business Line Area"));
+        List<String> engagementsIds = (extract.getList("Engagement ID"));
+        List<String> engagementsBla = (extract.getList("Business Line Area"));
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
 
-        for (int i = 0; i < ids.size(); i++) {
+        for (int i = 0; i < engagementsIds.size(); i++) {
 
             try {
-                String id = ids.get(i);
+                String id = engagementsIds.get(i);
                 engagementsPage.searchForEngagementOnGridById(id);
-                String bla = blas.get(i);
+                String bla = engagementsBla.get(i);
                 assertEquals(engagementsPage.foundEngagementBla().toUpperCase(), bla.toUpperCase());
             } catch (AssertionError error) {
-                if (engagementsPage.foundEngagementBla().equals("") || !ids.get(i).contains("ENG"))
-                    System.out.println("ID: " + ids.get(i) + " | " + error);
+                if (engagementsPage.foundEngagementBla().equals("") || !engagementsIds.get(i).contains("ENG"))
+                    System.out.println("ID: " + engagementsIds.get(i) + " | " + error);
             }
             engagementsPage.engagementIdFilter.clear();
         }
@@ -255,19 +256,19 @@ public class ExtractedEngagementDataTest extends Scenario {
         mainPage.navigateToEngagementsSection();
 
         ReportReader extract = new ReportReader(filePath, "Engagement", "Engagement ID,Partners");
-        List<String> ids = (extract.getList("Engagement ID"));
+        List<String> engagementsIds = (extract.getList("Engagement ID"));
 
-        EngagementsPage engagementsPage = new EngagementsPage(driver);
+        for (int i = 0; i < engagementsIds.size(); i++) {
 
-        for (int i = 0; i < ids.size(); i++) {
-            String engagementId = ids.get(i);
+            String engagementId = engagementsIds.get(i);
+
+            EngagementsPage engagementsPage = new EngagementsPage(driver);
             engagementsPage.searchForEngagementOnGridById(engagementId);
             engagementsPage.selectFoundEngagement();
 
             List<String> partnersExtracted = (extract.getList("Partners"));
 
             String[] partnersLineIds = partnersExtracted.get(i).split(",");
-            sleep(2000); //to avoid stale element because dynamic searching
 
             List<String> partnersLineIdsList = new ArrayList<String>();
             partnersLineIdsList.addAll(Arrays.asList(partnersLineIds));
@@ -294,11 +295,10 @@ public class ExtractedEngagementDataTest extends Scenario {
                     }
                 }
             }
-
             try {
                 assertTrue(eoiIds.containsAll(partnersLineIdsList));
             } catch (AssertionError error) {
-                System.out.println("ID: " + ids.get(i) + " | " + error);
+                System.out.println("ID: " + engagementsIds.get(i) + " | " + error);
                 System.out.println("EOI Partners:     " + eoiIds);
                 System.out.println("KISS Partners:    " + partnersLineIdsList + "\n");
             }

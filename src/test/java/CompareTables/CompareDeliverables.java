@@ -32,7 +32,6 @@ public class CompareDeliverables {
                 (eioDataPath, "deliverables_result", "Deliverable ID->Deliverable Title");
 
         List<String> extractDeliverableIdsList = extractDeliverableIds.getList("Deliverable ID");
-
         for (String extractedDeliverableId : extractDeliverableIdsList) {
 
             try {
