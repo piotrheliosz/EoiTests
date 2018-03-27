@@ -20,16 +20,14 @@ public class CompareDeliverables {
 
         ReportReader extractDeliverableIds = new ReportReader
                 (extractDataPath, "Deliverable", "Deliverable ID");
-        ReportReader extractDeliverableTitles = new ReportReader
-                (extractDataPath, "Deliverable", "Deliverable ID->Title");
 
         //EOI DATA
-        String eioDataPath = "eoiData\\deliverables_result.xls";
+        String eioDataPath = "eoiData\\eoi_deliverables_result.xls";
 
         ReportReader eoiDeliverablesIds = new ReportReader
                 (eioDataPath, "deliverables_result", "Deliverable ID");
-        ReportReader eoiDeliverablesTitles = new ReportReader
-                (eioDataPath, "deliverables_result", "Deliverable ID->Deliverable Title");
+
+        int i = 0;
 
         List<String> extractDeliverableIdsList = extractDeliverableIds.getList("Deliverable ID");
         for (String extractedDeliverableId : extractDeliverableIdsList) {
@@ -37,18 +35,51 @@ public class CompareDeliverables {
             try {
                 assertTrue(eoiDeliverablesIds.getList("Deliverable ID").contains(extractedDeliverableId));
             } catch (AssertionError error) {
-                System.out.println("\nMissing Extracted Deliverable Id: " + extractedDeliverableId);
+                System.out.println(++i + ". Missing Extracted Deliverable Id: " + extractedDeliverableId);
             }
+        }
+    }
+
+    @Test
+    public void compareDeliverablesTitles() throws IOException {
+
+        //EXTRACTED DATA
+        String extractDataPath = "extracts\\KISSExtract_Deliverable_BP2017Amendment.xls";
+
+        ReportReader extractDeliverableIds = new ReportReader
+                (extractDataPath, "Deliverable", "Deliverable ID");
+        ReportReader extractDeliverableTitles = new ReportReader
+                (extractDataPath, "Deliverable", "Deliverable ID->Title");
+
+        //EOI DATA
+        String eioDataPath = "eoiData\\eoi_deliverables_result.xls";
+
+        ReportReader eoiDeliverablesTitles = new ReportReader
+                (eioDataPath, "deliverables_result", "Deliverable ID->Deliverable Title");
+
+        int i = 0;
+
+        List<String> extractDeliverableIdsList = extractDeliverableIds.getList("Deliverable ID");
+        for (String extractedDeliverableId : extractDeliverableIdsList) {
+
 
             String extractedTitle = extractDeliverableTitles.getSingle(extractedDeliverableId + "->Title");
-            String eoiTitle = eoiDeliverablesTitles.getSingle(extractedDeliverableId + "->Deliverable Title");
+            String eoiTitle = "";
+
+            try {
+                eoiTitle = eoiDeliverablesTitles.getSingle(extractedDeliverableId + "->Deliverable Title");
+            } catch (RuntimeException ignore) {
+            }
+
             try {
                 assertEquals(extractedTitle.trim().replaceAll(" +", " "),
                         eoiTitle.trim().replaceAll(" +", " "));
-            } catch (AssertionError e) {
-                System.out.println("\nExtracted Deliverable Id: " + extractedDeliverableId
-                        + "\nExtracted Title: " + extractedTitle
-                        + "\nEoi Title: " + eoiTitle);
+            } catch (AssertionError error) {
+                System.out.println(++i + ". " + error
+                        + "\nExtracted Deliverable Id: " + extractedDeliverableId
+                        //+ "\nExtracted Title: " + extractedTitle
+                        //+ "\nEoi Title: " + eoiTitle
+                        + "\n");
             }
         }
     }

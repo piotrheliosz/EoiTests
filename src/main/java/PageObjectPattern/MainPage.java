@@ -6,12 +6,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 public class MainPage extends Page {
+    @FindBy(id = "outerContainer")
+    private WebElement outerContainer;
+
     public MainPage(WebDriver driver) {
         super(driver);
     }
-
-    @FindBy(id = "outerContainer")
-    private WebElement outerContainer;
 
     public String getUserName() {
         return driver.findElement(By.xpath("//h2[contains(@class, 'user-name')]")).getText();

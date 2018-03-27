@@ -16,24 +16,12 @@ import java.util.Set;
 
 
 public class Page {
+    static WebDriver driver;
+    private static File configFile = new File("config.properties");
+
     Page(WebDriver driver) {
         Page.driver = driver;
         PageFactory.initElements(driver, this);
-    }
-
-    static WebDriver driver;
-
-    private static File configFile = new File("config.properties");
-
-    void waitUntilVisibility(WebElement element, int timeout) {
-        loadingElement();
-        new WebDriverWait(driver, timeout).until(ExpectedConditions.visibilityOf(element));
-        loadingElement();
-    }
-
-    void loadingElement() {
-        new WebDriverWait(driver, 20).until(ExpectedConditions.invisibilityOfAllElements
-                (driver.findElements(By.xpath("//div[contains(@class, 'loader')]"))));
     }
 
     public static String getCredentials(String credential) {
@@ -46,6 +34,17 @@ public class Page {
             e.printStackTrace();
         }
         return null;
+    }
+
+    void waitUntilVisibility(WebElement element, int timeout) {
+        loadingElement();
+        new WebDriverWait(driver, timeout).until(ExpectedConditions.visibilityOf(element));
+        loadingElement();
+    }
+
+    void loadingElement() {
+        new WebDriverWait(driver, 20).until(ExpectedConditions.invisibilityOfAllElements
+                (driver.findElements(By.xpath("//div[contains(@class, 'loader')]"))));
     }
 
     public void takeScreenShot(String fileName) throws IOException, WebDriverException {

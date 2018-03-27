@@ -58,24 +58,24 @@ public class ReportReader {
      * @param sheetName - the name of the sheet that data comes from
      * @param dataPath  - Map oriented path to data.
      *                  <pre>	Consists of name of headers splited by '->' separator.
-     *                  	Last section can have multiple data headers specified, separated by ',' separator,
-     *                  	used to receive multiple data with one Reports.ReportReader instance
-     *                  	'*' symbol is used to map every column
+     *                                   	Last section can have multiple data headers specified, separated by ',' separator,
+     *                                   	used to receive multiple data with one Reports.ReportReader instance
+     *                                   	'*' symbol is used to map every column
      *
-     *                   Example:
-     *                   	Report:
-     *                   		Brand	Model	Color	Production Year	Price
-     *                   		Furd	Siesta	Blue	2002		10000
-     *                   		Furd	Scatter	Black	2008		33000
-     *                   	dataPath:
-     *                   		Brand->Model->Production Year->Price
-     *                   		Brand->Model->Price,Color
-     *                   		Brand->&#42; (Brand,Model,Color,Production Year,Price)
-     *                   		Brand
+     *                                    Example:
+     *                                    	Report:
+     *                                    		Brand	Model	Color	Production Year	Price
+     *                                    		Furd	Siesta	Blue	2002		10000
+     *                                    		Furd	Scatter	Black	2008		33000
+     *                                    	dataPath:
+     *                                    		Brand->Model->Production Year->Price
+     *                                    		Brand->Model->Price,Color
+     *                                    		Brand->&#42; (Brand,Model,Color,Production Year,Price)
+     *                                    		Brand
      *
      *
-     *                   See also {@link ReportReader#getSingle(String) or {@link ReportReader#getSet(String)} for usage
-     *                   </pre>
+     *                                    See also {@link ReportReader#getSingle(String) or {@link ReportReader#getSet(String)} for usage
+     *                                    </pre>
      * @throws IOException - Thrown by File opening
      */
     public ReportReader(String filePath, String sheetName, String dataPath) throws IOException {
@@ -235,12 +235,12 @@ public class ReportReader {
      *
      * @param dataPath - Map oriented path to data.
      *                 <pre>	Consists of name of headers splited by '->' separator.
-     *                 	For constructor dataPath: 'Brand'
-     *                 	this dataPath can look like:
-     *                 		'Brand' to receive set o Brands[Furd, Furd]
+     *                                 	For constructor dataPath: 'Brand'
+     *                                 	this dataPath can look like:
+     *                                 		'Brand' to receive set o Brands[Furd, Furd]
      *
      *
-     *                 	See also {@link ReportReader#ReportReader(String, String, String)} for constructor dataPath details</pre>
+     *                                 	See also {@link ReportReader#ReportReader(String, String, String)} for constructor dataPath details</pre>
      * @return List of String with value of column specified by dataPath
      * @throws IllegalArgumentException when dataPath is incorrect
      */
@@ -267,15 +267,15 @@ public class ReportReader {
      *
      * @param dataPath - Map oriented path to data.
      *                 <pre>	Consists of name of headers splited by '->' separator.
-     *                 	For constructor dataPath: 'Brand'
-     *                 	this dataPath can look like:
-     *                 		'Brand' to receive set o Brands[Furd]
+     *                                 	For constructor dataPath: 'Brand'
+     *                                 	this dataPath can look like:
+     *                                 		'Brand' to receive set o Brands[Furd]
      *
-     *                 	For constructor dataPath: 'Brand->Model'
-     *                 	this dataPath can look like:
-     *                 		'Furd->Model' to receive set of Models for Brand[Siesta,Scatter]
+     *                                 	For constructor dataPath: 'Brand->Model'
+     *                                 	this dataPath can look like:
+     *                                 		'Furd->Model' to receive set of Models for Brand[Siesta,Scatter]
      *
-     *                 	See also {@link ReportReader#ReportReader(String, String, String)} for constructor dataPath details</pre>
+     *                                 	See also {@link ReportReader#ReportReader(String, String, String)} for constructor dataPath details</pre>
      * @return Set of String with value of column specified by dataPath
      * @throws IllegalArgumentException when dataPath is incorrect
      */
@@ -289,12 +289,12 @@ public class ReportReader {
      *
      * @param dataPath - Map oriented path to data.
      *                 <pre>	Consists of name of headers splited by '->' separator.
-     *                 	For constructor dataPath: 'Brand->Model->Price,Color'
-     *                 	this dataPath can look like:
-     *                 		'Furd->Siesta->Price' to receive Price[10000] for Brand[Furd] and Model[Siesta]
-     *                 		'Furd->Scatter->Color' to receive Color[Black] for Brand[Furd] and Model[Scatter]
+     *                                 	For constructor dataPath: 'Brand->Model->Price,Color'
+     *                                 	this dataPath can look like:
+     *                                 		'Furd->Siesta->Price' to receive Price[10000] for Brand[Furd] and Model[Siesta]
+     *                                 		'Furd->Scatter->Color' to receive Color[Black] for Brand[Furd] and Model[Scatter]
      *
-     *                 	See also {@link ReportReader#ReportReader(String, String, String)} for constructor dataPath details</pre>
+     *                                 	See also {@link ReportReader#ReportReader(String, String, String)} for constructor dataPath details</pre>
      * @return String with value of cell specified by dataPath
      * @throws IllegalArgumentException when dataPath is incorrect
      */

@@ -1,5 +1,4 @@
 import PageObjectPattern.EngagementsPage;
-import PageObjectPattern.MainPage;
 import org.testng.annotations.Test;
 
 import java.io.IOException;

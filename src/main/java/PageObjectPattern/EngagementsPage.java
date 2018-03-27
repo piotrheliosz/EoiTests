@@ -10,63 +10,48 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EngagementsPage extends Page {
+    @FindBy(xpath = "//input[contains(@id, 'EngagementID')]")
+    public WebElement engagementIdFilter;
+    @FindBy(xpath = "//li[text()='Partners']")
+    WebElement partnersTab;
+    @FindBy(xpath = "(//div[contains(@id, 'partTitle')]//div[@id='Edit'])[1]")
+    private WebElement editEngagementButton;
+    @FindBy(xpath = "(//div[contains(@id, 'partTitle')]//div[@id='Edit'])[2]")
+    private WebElement editEngagementDetailsButton;
+    @FindBy(xpath = "//div[@data-field='Engagement.Scope']//textarea")
+    private WebElement scopeTextarea;
+    @FindBy(xpath = "//div[@data-field='Engagement.Objective']//textarea")
+    private WebElement objectiveTextarea;
+    @FindBy(xpath = "//div[@name='Engagement.ThematicField']//div[@class='item']/div[1]")
+    private WebElement thematicField;
+    @FindBy(xpath = "//i[@class='icon-close color-dark-hover']")
+    private WebElement closePopUp;
+    @FindBy(xpath = "//li[text()='Work Packages / Sections']")
+    private WebElement wpTab;
+    @FindBy(xpath = "//div[@class='container-fluid']")
+    private WebElement fluidContainer;
+    @FindBy(className = "overlay")
+    private WebElement overlayDiv;
+    @FindBy(xpath = "//div[@class='container-fluid']//textarea[@placeholder='Description']")
+    private WebElement wpDescTextArea;
+    @FindBy(xpath = "//*[text()='View']")
+    private WebElement viewButton;
+    @FindBy(xpath = "//div[@data-field='Engagement.Managers']//span[@class='input-group-addon icon text-main']")
+    private WebElement addManagerButton;
+    @FindBy(xpath = "//div[@data-field='Engagement.Managers']//input")
+    private WebElement addManagerInput;
+    @FindBy(xpath = "//div[@event='Save' or @event='Done']")
+    private WebElement saveEvent;
+
     public EngagementsPage(WebDriver driver) {
         super(driver);
     }
-
-    @FindBy(xpath = "//input[contains(@id, 'EngagementID')]")
-    public WebElement engagementIdFilter;
-
-    @FindBy(xpath = "//li[text()='Partners']")
-    WebElement partnersTab;
-
-    @FindBy(xpath = "(//div[contains(@id, 'partTitle')]//div[@id='Edit'])[1]")
-    private WebElement editEngagementButton;
-
-    @FindBy(xpath = "(//div[contains(@id, 'partTitle')]//div[@id='Edit'])[2]")
-    private WebElement editEngagementDetailsButton;
-
-    @FindBy(xpath = "//div[@data-field='Engagement.Scope']//textarea")
-    private WebElement scopeTextarea;
-
-    @FindBy(xpath = "//div[@data-field='Engagement.Objective']//textarea")
-    private WebElement objectiveTextarea;
-
-    @FindBy(xpath = "//div[@name='Engagement.ThematicField']//div[@class='item']/div[1]")
-    private WebElement thematicField;
-
-    @FindBy(xpath = "//i[@class='icon-close color-dark-hover']")
-    private WebElement closePopUp;
-
-    @FindBy(xpath = "//li[text()='Work Packages / Sections']")
-    private WebElement wpTab;
-
-    @FindBy(xpath = "//div[@class='container-fluid']")
-    private WebElement fluidContainer;
-
-    @FindBy(className = "overlay")
-    private WebElement overlayDiv;
-
-    @FindBy(xpath = "//div[@class='container-fluid']//textarea[@placeholder='Description']")
-    private WebElement wpDescTextArea;
-
-    @FindBy(xpath = "//*[text()='View']")
-    private WebElement viewButton;
-
-    @FindBy(xpath = "//div[@data-field='Engagement.Managers']//span[@class='input-group-addon icon text-main']")
-    private WebElement addManagerButton;
-
-    @FindBy(xpath = "//div[@data-field='Engagement.Managers']//input")
-    private WebElement addManagerInput;
-
-    @FindBy(xpath = "//div[@event='Save' or @event='Done']")
-    private WebElement saveEvent;
 
     public void searchForEngagementOnGridById(String engagementId) throws InterruptedException, IOException {
         waitUntilVisibility(engagementIdFilter, 10);
         engagementIdFilter.sendKeys(engagementId);
         try {
-            new WebDriverWait(driver, 10)
+            new WebDriverWait(driver, 3)
                     .until(ExpectedConditions.numberOfElementsToBe
                             (By.xpath("//table[1]/tbody[@class='rgrid rgridtree']/tr[contains(@id, 'row')]"), 1));
         } catch (WebDriverException e) {
