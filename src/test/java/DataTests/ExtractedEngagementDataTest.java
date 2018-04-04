@@ -1,6 +1,9 @@
+package DataTests;
+
 import PageObjectPattern.EngagementsPage;
 import PageObjectPattern.MainPage;
 import Reports.ReportReader;
+import SetUp.Scenario;
 import org.openqa.selenium.TimeoutException;
 import org.testng.annotations.Test;
 
@@ -286,7 +289,7 @@ public class ExtractedEngagementDataTest extends Scenario {
 
                 eoiIds.add(eoiId);
                 if (eoiIds.size() == 9 && engagementsPage.footedIsDisplayed()) {
-                    engagementsPage.gotoAnotherPage();
+                    engagementsPage.goToAnotherPage();
                     for (String eoiPartner2 : engagementsPage.foundEngagementPartners()) {
                         String[] bits2 = eoiPartner2.split("\\(");
                         String eoiId2 = bits2[bits2.length - 1].substring(0, bits2[bits2.length - 1].length() - 1);

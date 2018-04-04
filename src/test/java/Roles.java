@@ -1,7 +1,10 @@
 import PageObjectPattern.EngagementsPage;
+import SetUp.Scenario;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.testng.AssertJUnit.assertTrue;
 
@@ -14,6 +17,8 @@ public class Roles extends Scenario {
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
 
+        List<String> engagementsWithNoPrivilegeToEdit = new ArrayList<String>();
+
         int i = 0;
         for (String id : engagementsPage.getEngagementsIdsList(filePath)) {
 
@@ -25,10 +30,12 @@ public class Roles extends Scenario {
                 assertTrue(engagementsPage.getEngagementManagesList().contains("Piotr Heliosz"));
             } catch (AssertionError error) {
                 System.out.println(++i + ". " + error + " Engagement ID: " + id);
-                engagementsPage.takeScreenShot(id + "_missing Manager");
+                //engagementsPage.takeScreenShot(id + "_missing Manager");
+                engagementsWithNoPrivilegeToEdit.add(id);
             }
             engagementsPage.closePopUp();
             engagementsPage.engagementIdFilter.clear();
         }
+        System.out.println("engagementsWithNoPrivilegeToEdit: " + engagementsWithNoPrivilegeToEdit);
     }
 }

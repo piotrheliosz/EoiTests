@@ -12,6 +12,8 @@ import java.util.List;
 public class EngagementsPage extends Page {
     @FindBy(xpath = "//input[contains(@id, 'EngagementID')]")
     public WebElement engagementIdFilter;
+    @FindBy(xpath = "//input[contains(@id, 'Name')]")
+    public WebElement engagementNameFilter;
     @FindBy(xpath = "//li[text()='Partners']")
     WebElement partnersTab;
     @FindBy(xpath = "(//div[contains(@id, 'partTitle')]//div[@id='Edit'])[1]")
@@ -55,10 +57,24 @@ public class EngagementsPage extends Page {
                     .until(ExpectedConditions.numberOfElementsToBe
                             (By.xpath("//table[1]/tbody[@class='rgrid rgridtree']/tr[contains(@id, 'row')]"), 1));
         } catch (WebDriverException e) {
-            System.out.println("ENGAGEMENT NOT FOUND: " + engagementId + "\n------------------------------");
-            takeScreenShot("ENGAGEMENT_NOT_FOUND_" + engagementId);
+            System.out.println("ENGAGEMENT ID NOT FOUND: " + engagementId);
         }
         loadingElement();
+    }
+
+    public boolean searchForEngagementOnGridByName(String engagementName) {
+        waitUntilVisibility(engagementNameFilter, 10);
+        engagementNameFilter.sendKeys(engagementName);
+        try {
+            new WebDriverWait(driver, 3)
+                    .until(ExpectedConditions.numberOfElementsToBe
+                            (By.xpath("//table[1]/tbody[@class='rgrid rgridtree']/tr[contains(@id, 'row')]"), 1));
+            return driver.findElement(By.xpath("//*[text()=' " + engagementName + "']")).isDisplayed();
+        } catch (WebDriverException e) {
+            System.out.println("ENGAGEMENT NAME NOT FOUND: " + engagementName);
+            loadingElement();
+            return false;
+        }
     }
 
     public void selectFoundEngagement() {
@@ -74,6 +90,15 @@ public class EngagementsPage extends Page {
         } catch (UnhandledAlertException e) {
             driver.switchTo().alert().accept();
             engagementIdFilter.clear();
+        }
+    }
+
+    public void clearNameFilter() {
+        try {
+            engagementNameFilter.clear();
+        } catch (UnhandledAlertException e) {
+            driver.switchTo().alert().accept();
+            engagementNameFilter.clear();
         }
     }
 
@@ -226,7 +251,7 @@ public class EngagementsPage extends Page {
         }
     }
 
-    public void gotoAnotherPage() {
+    public void goToAnotherPage() {
         driver.findElement(By.xpath("//span[contains(@onclick, 'moveNext')]")).click();
     }
 
@@ -251,29 +276,31 @@ public class EngagementsPage extends Page {
         return partnersIds;
     }
 
-    public List<String> getDeliverablesIdsList() {
-        List<String> deliverablesIdsListIds = new ArrayList<String>();
-        for (WebElement element : driver.findElements(By.xpath("//div[@coll-name='Task.Deliverables']//div[2]"))) {
-            deliverablesIdsListIds.add(element.getAttribute("textContent"));
-        }
-        return deliverablesIdsListIds;
-    }
-
-    public void viewActions() {
-        loadingElement();
-        JavascriptExecutor executor = (JavascriptExecutor) driver;
-        executor.executeScript("arguments[0].scrollIntoView(true);", viewButton);
-        waitUntilVisibility(viewButton, 10);
-        viewButton.click();
-        loadingElement();
-    }
-
     public List<String> getEngagementManagesList() {
-        waitUntilVisibility(fluidContainer, 5);
+        try {
+            waitUntilVisibility(fluidContainer, 5);
+        } catch (WebDriverException ignore) {
+        }
         List<String> engagementManagesList = new ArrayList<String>();
         for (WebElement s : driver.findElements(By.xpath("//div[@coll-name='Engagement.Managers']//div[2]"))) {
             engagementManagesList.add(s.getAttribute("textContent"));
         }
         return engagementManagesList;
+    }
+
+    public void clickAddNewEngagementButton() {
+        driver.findElement(By.xpath("//div[@id='partTitle-" + getPartId(1) + "']//div[@id='New']")).click();
+    }
+
+    public void deleteSelectedEngagement() {
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        loadingElement();
+        wait.until(ExpectedConditions
+                .elementToBeClickable(By.xpath("//div[@id='partTitle-" + getPartId(1) + "']//div[@id='Delete']")));
+        driver.findElement(By.xpath("//div[@id='partTitle-" + getPartId(1) + "']//div[@id='Delete']")).click();
+        wait.until(ExpectedConditions
+                .elementToBeClickable(By.xpath("//div[@event='Yes']")));
+        driver.findElement(By.xpath("//div[@event='Yes']")).click();
+        loadingElement();
     }
 }

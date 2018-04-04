@@ -42,9 +42,26 @@ public class Page {
         loadingElement();
     }
 
+    void clickStaleElement(By by) {
+        int attempts = 0;
+        while (attempts < 2) {
+            try {
+                driver.findElement(by).click();
+                break;
+            } catch (StaleElementReferenceException ignored) {
+            }
+            attempts++;
+        }
+    }
+
     void loadingElement() {
         new WebDriverWait(driver, 20).until(ExpectedConditions.invisibilityOfAllElements
                 (driver.findElements(By.xpath("//div[contains(@class, 'loader')]"))));
+    }
+
+    String getPartId(int divIndex) {
+        return driver.findElement(By.xpath("(//*[contains(@id, 'partdiv')])[" + divIndex + "]"))
+                .getAttribute("id").substring(8);
     }
 
     public void takeScreenShot(String fileName) throws IOException, WebDriverException {
@@ -67,4 +84,15 @@ public class Page {
         return (extractIds.getSet("Engagement ID"));
     }
 
+    public static List<String> getListOfEngagementsWithoutPrivilegesToEdit() throws IOException {
+        String filePath = "ListOfEngagementsWithoutPrivilegesToEdit.xls";
+        ReportReader extractIds = new ReportReader(filePath, "Engagement ID", "Engagement ID");
+        return extractIds.getList("Engagement ID");
+    }
+
+    public void navigateToEngegementOverviewPage() {
+        if (!driver.getCurrentUrl().contains("engagements-overview")) {
+            driver.navigate().to(getCredentials("baseUrl") + "/portal/kicinnoenergy-acc/page/engagements-overview/");
+        }
+    }
 }
