@@ -48,6 +48,7 @@ public class ExtractedEngagementDataTest extends Scenario {
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
 
+        int ii = 0;
         for (int i = 0; i < engagementsIds.size(); i++) {
 
             try {
@@ -57,7 +58,7 @@ public class ExtractedEngagementDataTest extends Scenario {
                 assertEquals(engagementsPage.foundEngagementName().toUpperCase(), name.toUpperCase());
             } catch (AssertionError error) {
                 if (!engagementsIds.get(i).contains("ENG")) {
-                    System.out.println("ID: " + engagementsIds.get(i) + " | " + error);
+                    System.out.println(++ii + ". ID: " + engagementsIds.get(i) + " | " + error);
                 }
             }
             engagementsPage.engagementIdFilter.clear();
@@ -92,8 +93,7 @@ public class ExtractedEngagementDataTest extends Scenario {
             } catch (AssertionError error) {
                 if (engagementsPage.getObjective().equals("") || !engagementsIds.get(i).contains("ENG")) {
                     System.out.println("ID: " + engagementsIds.get(i)
-                            //+ " | java.lang.AssertionError"
-                            //+ "\nKISS EXTRACT: " + objective + "\nEOI: " + engagementsPage.getObjective()
+                            + "\nKISS EXTRACT: " + objective + "\nEOI: " + engagementsPage.getObjective()
                     );
                 }
             }
@@ -276,7 +276,7 @@ public class ExtractedEngagementDataTest extends Scenario {
             partnersLineIdsList.addAll(Arrays.asList(partnersLineIds));
 
             List<String> eoiIds = new ArrayList<String>();
-            for (String eoiPartner : engagementsPage.foundEngagementPartners()) {
+            for (String eoiPartner : engagementsPage.getFoundEngagementPartnersList()) {
                 String[] bits = eoiPartner.split("\\(");
 
                 String eoiId = "";
@@ -290,7 +290,7 @@ public class ExtractedEngagementDataTest extends Scenario {
                 eoiIds.add(eoiId);
                 if (eoiIds.size() == 9 && engagementsPage.footedIsDisplayed()) {
                     engagementsPage.goToAnotherPage();
-                    for (String eoiPartner2 : engagementsPage.foundEngagementPartners()) {
+                    for (String eoiPartner2 : engagementsPage.getFoundEngagementPartnersList()) {
                         String[] bits2 = eoiPartner2.split("\\(");
                         String eoiId2 = bits2[bits2.length - 1].substring(0, bits2[bits2.length - 1].length() - 1);
                         eoiIds.add(eoiId2);

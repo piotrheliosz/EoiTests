@@ -13,7 +13,7 @@ public class EngagementsPage extends Page {
     @FindBy(xpath = "//input[contains(@id, 'EngagementID')]")
     public WebElement engagementIdFilter;
     @FindBy(xpath = "//input[contains(@id, 'Name')]")
-    public WebElement engagementNameFilter;
+    private WebElement engagementNameFilter;
     @FindBy(xpath = "//li[text()='Partners']")
     WebElement partnersTab;
     @FindBy(xpath = "(//div[contains(@id, 'partTitle')]//div[@id='Edit'])[1]")
@@ -57,7 +57,7 @@ public class EngagementsPage extends Page {
                     .until(ExpectedConditions.numberOfElementsToBe
                             (By.xpath("//table[1]/tbody[@class='rgrid rgridtree']/tr[contains(@id, 'row')]"), 1));
         } catch (WebDriverException e) {
-            System.out.println("ENGAGEMENT ID NOT FOUND: " + engagementId);
+            System.out.println("Engagement Id NOT FOUND: " + engagementId);
         }
         loadingElement();
     }
@@ -71,7 +71,7 @@ public class EngagementsPage extends Page {
                             (By.xpath("//table[1]/tbody[@class='rgrid rgridtree']/tr[contains(@id, 'row')]"), 1));
             return driver.findElement(By.xpath("//*[text()=' " + engagementName + "']")).isDisplayed();
         } catch (WebDriverException e) {
-            System.out.println("ENGAGEMENT NAME NOT FOUND: " + engagementName);
+            System.out.println("Engagement name NOT FOUND: " + engagementName);
             loadingElement();
             return false;
         }
@@ -180,11 +180,19 @@ public class EngagementsPage extends Page {
         }
     }
 
-    public List<String> foundEngagementPartners() throws InterruptedException {
+    public List<String> getFoundEngagementPartnersList() throws InterruptedException {
         List<String> partnersList = new ArrayList<String>();
-        for (WebElement partnerRow : driver.findElements(By.xpath("//table/tbody[@class='rgrid rgridlist']/tr/td[1]"))) {
-            String partner = partnerRow.getText();
-            partnersList.add(partner);
+        try {
+            for (WebElement partnerRow : driver.findElements(By.xpath("//table/tbody[@class='rgrid rgridlist']/tr/td[1]"))) {
+                String partner = partnerRow.getAttribute("textContent");
+                partnersList.add(partner);
+            }
+        } catch (StaleElementReferenceException e) {
+            partnersList.clear();
+            for (WebElement partnerRow : driver.findElements(By.xpath("//table/tbody[@class='rgrid rgridlist']/tr/td[1]"))) {
+                String partner = partnerRow.getAttribute("textContent");
+                partnersList.add(partner);
+            }
         }
         return partnersList;
     }
@@ -260,11 +268,10 @@ public class EngagementsPage extends Page {
             waitUntilVisibility(wpTab, 5);
             wpTab.click();
             loadingElement();
-            return driver.findElement(By.xpath("//*[text()='" + wpId + "']/../td[3]")).getText();
-        } catch (Exception e) {
-            e.printStackTrace();
-            takeScreenShot(wpId + "_wpId_NoSuchElementException");
-            return "";
+            return driver.findElement(By.xpath("//*[text()='" + wpId + "']/../td[3]")).getAttribute("textContent");
+        } catch (NoSuchElementException e) {
+            System.out.println("WP Id NOT FOUND: " + wpId);
+            return "NOT FOUND";
         }
     }
 
@@ -296,11 +303,9 @@ public class EngagementsPage extends Page {
         WebDriverWait wait = new WebDriverWait(driver, 10);
         loadingElement();
         wait.until(ExpectedConditions
-                .elementToBeClickable(By.xpath("//div[@id='partTitle-" + getPartId(1) + "']//div[@id='Delete']")));
-        driver.findElement(By.xpath("//div[@id='partTitle-" + getPartId(1) + "']//div[@id='Delete']")).click();
+                .elementToBeClickable(By.xpath("//div[@id='partTitle-" + getPartId(1) + "']//div[@id='Delete']"))).click();
         wait.until(ExpectedConditions
-                .elementToBeClickable(By.xpath("//div[@event='Yes']")));
-        driver.findElement(By.xpath("//div[@event='Yes']")).click();
+                .elementToBeClickable(By.xpath("//div[@event='Yes']"))).click();
         loadingElement();
     }
 }

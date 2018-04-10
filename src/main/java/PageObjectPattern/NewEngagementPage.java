@@ -17,27 +17,24 @@ public class NewEngagementPage extends Page {
     public WebElement saveButton;
 
     private WebElement getPopUpInput(String elementName) {
-        new WebDriverWait(driver, 5)
+        return new WebDriverWait(driver, 5)
                 .until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@data-field='Engagement." + elementName + "']//input")));
-        return driver.findElement(By.xpath("//div[@data-field='Engagement." + elementName + "']//input"));
     }
 
     private WebElement getPopUpDiv(String elementName) {
-        new WebDriverWait(driver, 5)
+        return new WebDriverWait(driver, 5)
                 .until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@data-field='Engagement." + elementName + "']")));
-        return driver.findElement(By.xpath("//div[@data-field='Engagement." + elementName + "']"));
     }
 
     private WebElement getFoundItem(String itemName) {
-        new WebDriverWait(driver, 10)
+        return new WebDriverWait(driver, 10)
                 .until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class='item']//div[text()='" + itemName + "']")));
-        return driver.findElement(By.xpath("//div[@class='item']//div[text()='" + itemName + "']"));
     }
 
     public void sendNewEngagementName(String engagementName) {
         new WebDriverWait(driver, 5)
-                .until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@data-field='Engagement.Name']//input")));
-        driver.findElement(By.xpath("//div[@data-field='Engagement.Name']//input")).sendKeys(engagementName);
+                .until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@data-field='Engagement.Name']//input")))
+                .sendKeys(engagementName);
     }
 
     public void setTypeOfNewEngagement(String engagementType) {

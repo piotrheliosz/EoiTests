@@ -21,16 +21,15 @@ public class AddAndRemoveEngagementTest extends Scenario {
         engagementsPage.clickAddNewEngagementButton();
 
         NewEngagementPage newEngagementsPage = new NewEngagementPage(driver);
-
         newEngagementsPage.sendNewEngagementName(engagementName);
         newEngagementsPage.setTypeOfNewEngagement("Master School");
-        //newEngagementsPage.setParentPartnerToNewEngagement("KRAKEN");
+        newEngagementsPage.setParentPartnerToNewEngagement("KRAKEN");
         newEngagementsPage.setBlaToNewEngagement("Innovation Projects");
         newEngagementsPage.setManagementsUnitToNewEngagement("Central Europe");
         newEngagementsPage.setManagerToNewEngagement("Piotr Heliosz");
         newEngagementsPage.saveButton.click();
 
-        System.out.println("engagementName: " + engagementName);
+        System.out.println("Engagement name: " + engagementName);
 
         assertTrue(engagementsPage.searchForEngagementOnGridByName(engagementName));
 
@@ -38,7 +37,7 @@ public class AddAndRemoveEngagementTest extends Scenario {
     }
 
     @Test(priority = 2)
-    public void removeAlreadyAddedEngagement() {
+    public void engagementShouldBeRemoved() {
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
         engagementsPage.navigateToEngegementOverviewPage();
@@ -48,6 +47,5 @@ public class AddAndRemoveEngagementTest extends Scenario {
         engagementsPage.clearNameFilter();
 
         assertFalse(engagementsPage.searchForEngagementOnGridByName(engagementName));
-
     }
 }
