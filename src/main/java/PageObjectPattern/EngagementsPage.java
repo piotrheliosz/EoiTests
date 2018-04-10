@@ -1,6 +1,7 @@
 package PageObjectPattern;
 
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -44,6 +45,12 @@ public class EngagementsPage extends Page {
     private WebElement addManagerInput;
     @FindBy(xpath = "//div[@event='Save' or @event='Done']")
     private WebElement saveEvent;
+    @FindBy(xpath = "(//div[@id='mainToolbar']//span[text()='Engagements'])[1]")
+    private WebElement engagementTopMenu;
+    @FindBy(xpath = "//div[@id='mainToolbar']//span[text()='Engagement Performance']")
+    private WebElement engagementPerformanceSubmenu;
+    @FindBy(xpath = "(//div[@id='mainToolbar']//span[text()='Engagement Performance']/..//a)[1]")
+    private WebElement firstEngagementFromSubmenu;
 
     public EngagementsPage(WebDriver driver) {
         super(driver);
@@ -239,7 +246,7 @@ public class EngagementsPage extends Page {
         return wpTitles;
     }
 
-    public void editWpFoundById(String wpId) {
+    public void clickEditWpFoundById(String wpId) {
         try {
             waitUntilVisibility(wpTab, 5);
             wpTab.click();
@@ -307,5 +314,15 @@ public class EngagementsPage extends Page {
         wait.until(ExpectedConditions
                 .elementToBeClickable(By.xpath("//div[@event='Yes']"))).click();
         loadingElement();
+    }
+
+    public void goToEngagementsPerformanceSection() {
+        Actions actions = new Actions(driver);
+        waitUntilVisibility(engagementTopMenu, 5);
+        actions.moveToElement(engagementTopMenu).perform();
+        waitUntilVisibility(engagementPerformanceSubmenu, 3);
+        actions.moveToElement(engagementPerformanceSubmenu).perform();
+        waitUntilVisibility(firstEngagementFromSubmenu, 3);
+        actions.moveToElement(firstEngagementFromSubmenu).click().perform();
     }
 }

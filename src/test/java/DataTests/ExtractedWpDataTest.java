@@ -62,7 +62,7 @@ public class ExtractedWpDataTest extends Scenario {
                 String wpDescriptionExtracted = (extractDesc.getSingle(engagementId + "->" + wpId + "->Description"));
 
                 try {
-                    engagementsPage.editWpFoundById(wpId);
+                    engagementsPage.clickEditWpFoundById(wpId);
                     try {
                         assertEquals(engagementsPage.getWpDescription().trim().replaceAll(" +", " "),
                                 wpDescriptionExtracted.trim().replaceAll(" +", " "));
@@ -103,7 +103,7 @@ public class ExtractedWpDataTest extends Scenario {
 
                 try {
                     try {
-                        engagementsPage.editWpFoundById(wpId);
+                        engagementsPage.clickEditWpFoundById(wpId);
                     } catch (Exception e) {
                         engagementsPage.takeScreenShot(engagementId + "_editWpFoundById");
                         e.printStackTrace();

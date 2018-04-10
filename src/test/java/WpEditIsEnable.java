@@ -28,7 +28,7 @@ public class WpEditIsEnable extends Scenario {
 
             for (String wpId : wpIdList) {
                 try {
-                    engagementsPage.editWpFoundById(wpId);
+                    engagementsPage.clickEditWpFoundById(wpId);
                     engagementsPage.closePopUp();
                 } catch (UnhandledAlertException e) {
                     e.getStackTrace();

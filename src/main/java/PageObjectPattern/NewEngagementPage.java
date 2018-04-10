@@ -43,7 +43,7 @@ public class NewEngagementPage extends Page {
         try {
             getFoundItem(engagementType).click();
         } catch (StaleElementReferenceException e) {
-            clickStaleElement(By.xpath("//div[@class='item']//div[text()='" + engagementType + "']"));
+            clickStaleElementBy(By.xpath("//div[@class='item']//div[text()='" + engagementType + "']"));
         }
     }
 
@@ -54,7 +54,7 @@ public class NewEngagementPage extends Page {
         try {
             getFoundItem(parentEngagement).click();
         } catch (StaleElementReferenceException e) {
-            clickStaleElement(By.xpath("//div[@class='item']//div[text()='" + parentEngagement + "']"));
+            clickStaleElementBy(By.xpath("//div[@class='item']//div[text()='" + parentEngagement + "']"));
         }
     }
 
@@ -64,7 +64,7 @@ public class NewEngagementPage extends Page {
         try {
             getFoundItem(bla).click();
         } catch (StaleElementReferenceException e) {
-            clickStaleElement(By.xpath("//div[@class='item']//div[text()='" + bla + "']"));
+            clickStaleElementBy(By.xpath("//div[@class='item']//div[text()='" + bla + "']"));
         }
     }
 
@@ -74,7 +74,7 @@ public class NewEngagementPage extends Page {
         try {
             getFoundItem(managementUnit).click();
         } catch (StaleElementReferenceException e) {
-            clickStaleElement(By.xpath("//div[@class='item']//div[text()='" + managementUnit + "']"));
+            clickStaleElementBy(By.xpath("//div[@class='item']//div[text()='" + managementUnit + "']"));
         }
     }
 
@@ -84,7 +84,7 @@ public class NewEngagementPage extends Page {
         try {
             getFoundItem(manager).click();
         } catch (StaleElementReferenceException e) {
-            clickStaleElement(By.xpath("//div[@class='item']//div[text()='" + manager + "']"));
+            clickStaleElementBy(By.xpath("//div[@class='item']//div[text()='" + manager + "']"));
         }
         driver.findElement(By.xpath("//div[@class='apply']/div")).click();
     }

@@ -3,6 +3,7 @@ package PageObjectPattern;
 import Reports.ReportReader;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -24,6 +25,9 @@ public class Page {
         PageFactory.initElements(driver, this);
     }
 
+    @FindBy(id = "homeButton")
+    public WebElement homeButton;
+
     public static String getCredentials(String credential) {
         try {
             FileReader fileReader = new FileReader(configFile);
@@ -42,11 +46,23 @@ public class Page {
         loadingElement();
     }
 
-    void clickStaleElement(By by) {
+    void clickStaleElementBy(By by) {
         int attempts = 0;
         while (attempts < 2) {
             try {
                 driver.findElement(by).click();
+                break;
+            } catch (StaleElementReferenceException ignored) {
+            }
+            attempts++;
+        }
+    }
+
+    void clickStaleWebElement(WebElement element) {
+        int attempts = 0;
+        while (attempts < 2) {
+            try {
+                element.click();
                 break;
             } catch (StaleElementReferenceException ignored) {
             }
