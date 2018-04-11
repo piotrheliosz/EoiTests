@@ -26,7 +26,7 @@ public class Page {
     }
 
     @FindBy(id = "homeButton")
-    public WebElement homeButton;
+    private WebElement homeButton;
 
     public static String getCredentials(String credential) {
         try {
@@ -40,10 +40,9 @@ public class Page {
         return null;
     }
 
-    void waitUntilVisibility(WebElement element, int timeout) {
+    WebElement waitUntilVisibility(WebElement element, int timeout) {
         loadingElement();
-        new WebDriverWait(driver, timeout).until(ExpectedConditions.visibilityOf(element));
-        loadingElement();
+        return new WebDriverWait(driver, timeout).until(ExpectedConditions.visibilityOf(element));
     }
 
     void clickStaleElementBy(By by) {
@@ -110,5 +109,9 @@ public class Page {
         if (!driver.getCurrentUrl().contains("engagements-overview")) {
             driver.navigate().to(getCredentials("baseUrl") + "/portal/kicinnoenergy-acc/page/engagements-overview/");
         }
+    }
+
+    public void clickHomeButton(){
+        waitUntilVisibility(homeButton,5).click();
     }
 }

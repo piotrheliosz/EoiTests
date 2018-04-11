@@ -30,7 +30,6 @@ public class Roles extends Scenario {
                 assertTrue(engagementsPage.getEngagementManagesList().contains("Piotr Heliosz"));
             } catch (AssertionError error) {
                 System.out.println(++i + ". " + error + " Engagement ID: " + id);
-                //engagementsPage.takeScreenShot(id + "_missing Manager");
                 engagementsWithNoPrivilegeToEdit.add(id);
             }
             engagementsPage.closePopUp();

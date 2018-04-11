@@ -1,3 +1,5 @@
+package FunctionalityTests;
+
 import PageObjectPattern.EngagementsPage;
 import PageObjectPattern.EngagementsPerformancePage;
 import PageObjectPattern.MainPage;
@@ -9,7 +11,7 @@ import java.io.IOException;
 
 import static org.testng.AssertJUnit.assertTrue;
 
-public class AddPartnerToEngagement extends Scenario {
+public class AssignPartnerToEngagement extends Scenario {
 
     @DataProvider(name = "partnersNames")
     public static Object[] partnerToAdd() {
@@ -18,7 +20,7 @@ public class AddPartnerToEngagement extends Scenario {
     }
 
     @Test(dataProvider = "partnersNames")
-    public void partnerShouldBeAddedToEngagement(String partnerToAdd) throws IOException {
+    public void partnerShouldBeAssignedToEngagement(String partnerToAdd) throws IOException {
         MainPage mainPage = new MainPage(driver);
         mainPage.navigateToEngagementsSection();
 
@@ -34,7 +36,7 @@ public class AddPartnerToEngagement extends Scenario {
 
         assertTrue(engagementsPerformancePage.partnerIsDisplayedOnGrid(partnerToAdd));
 
-        mainPage.homeButton.click();
+        mainPage.clickHomeButton();
     }
 }
 

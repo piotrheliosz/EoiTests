@@ -1,3 +1,5 @@
+package FunctionalityTests;
+
 import PageObjectPattern.EngagementsPage;
 import PageObjectPattern.NewEngagementPage;
 import SetUp.Scenario;
