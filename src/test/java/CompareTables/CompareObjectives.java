@@ -26,13 +26,13 @@ public class CompareObjectives {
         ReportReader eoiObjectiveIds = new ReportReader
                 (eioDataPath, "objective_result", "Objective ID");
 
+        int i = 0;
         List<String> extractObjectiveIdsList = extractObjectiveIds.getList("Objective ID");
         for (String extractedObjectiveId : extractObjectiveIdsList) {
-
             try {
                 assertTrue(eoiObjectiveIds.getList("Objective ID").contains(extractedObjectiveId));
             } catch (AssertionError error) {
-                System.out.println("Missing Extracted Objective Id: " + extractedObjectiveId);
+                System.out.println(++i + ". Missing Extracted Objective Id: " + extractedObjectiveId);
             }
         }
     }
@@ -67,7 +67,7 @@ public class CompareObjectives {
                         eoiTitle.trim().replaceAll(" +", " "));
             } catch (AssertionError error) {
                 System.out.println(error
-                        + "\nExtracted Objective Id: " + extractedObjectiveId
+                                + "\nExtracted Objective Id: " + extractedObjectiveId
                         //+ "\nExtracted Title: " + extractedTitle
                         //+ "\nEoi Title: " + eoiTitle
                 );

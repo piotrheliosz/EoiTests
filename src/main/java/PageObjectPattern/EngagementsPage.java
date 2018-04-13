@@ -89,6 +89,7 @@ public class EngagementsPage extends Page {
             driver.findElement(By.xpath("//table[1]/tbody[@class='rgrid rgridtree']/tr[contains(@id, 'row')]/td[3]")).click();
         } catch (Exception ignore) {
         }
+        loadingElement();
     }
 
     public void clearIdFilter() {
@@ -188,18 +189,25 @@ public class EngagementsPage extends Page {
     }
 
     public List<String> getFoundEngagementPartnersList() throws InterruptedException {
+        partnersTab.click();
         List<String> partnersList = new ArrayList<String>();
         try {
-            for (WebElement partnerRow : driver.findElements(By.xpath("//table/tbody[@class='rgrid rgridlist']/tr/td[1]"))) {
-                String partner = partnerRow.getAttribute("textContent");
-                partnersList.add(partner);
+            new WebDriverWait(driver, 5).until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath("//table/tbody[@class='rgrid rgridlist']/tr/td[1]"), 0));
+
+            try {
+                for (WebElement partnerRow : driver.findElements(By.xpath("//table/tbody[@class='rgrid rgridlist']/tr/td[1]"))) {
+                    String partner = partnerRow.getAttribute("textContent");
+                    partnersList.add(partner);
+                }
+            } catch (StaleElementReferenceException e) {
+                e.printStackTrace();
+                partnersList.clear();
+                for (WebElement partnerRow : driver.findElements(By.xpath("//table/tbody[@class='rgrid rgridlist']/tr/td[1]"))) {
+                    String partner = partnerRow.getAttribute("textContent");
+                    partnersList.add(partner);
+                }
             }
-        } catch (StaleElementReferenceException e) {
-            partnersList.clear();
-            for (WebElement partnerRow : driver.findElements(By.xpath("//table/tbody[@class='rgrid rgridlist']/tr/td[1]"))) {
-                String partner = partnerRow.getAttribute("textContent");
-                partnersList.add(partner);
-            }
+        } catch (TimeoutException ignore) {
         }
         return partnersList;
     }
@@ -260,14 +268,22 @@ public class EngagementsPage extends Page {
 
     public boolean footedIsDisplayed() {
         try {
-            return driver.findElement(By.xpath("//tfoot[contains(@id, 'rgridfoot')]//span[contains(text(),'Page')]")).isDisplayed();
+            return displayedStaleWebElement(driver.findElement(By.xpath("//tfoot[contains(@id, 'rgridfoot')]//span[contains(text(),'Page')]")));
         } catch (NoSuchElementException e) {
             return false;
         }
     }
 
-    public void goToAnotherPage() {
-        driver.findElement(By.xpath("//span[contains(@onclick, 'moveNext')]")).click();
+    public WebElement goToAnotherPageButton() {
+        return driver.findElement(By.xpath("//span[contains(@onclick, 'moveNext')]"));
+    }
+
+    public boolean goToAnotherPageButtonIsDisplayed() {
+        try {
+            return driver.findElement(By.xpath("//span[contains(@onclick, 'moveNext')]")).isDisplayed();
+        } catch (NoSuchElementException ignore) {
+            return false;
+        }
     }
 
     public String getWpLeadingPartner(String wpId) throws IOException {
@@ -297,6 +313,18 @@ public class EngagementsPage extends Page {
         }
         List<String> engagementManagesList = new ArrayList<String>();
         for (WebElement s : driver.findElements(By.xpath("//div[@coll-name='Engagement.Managers']//div[2]"))) {
+            engagementManagesList.add(s.getAttribute("textContent"));
+        }
+        return engagementManagesList;
+    }
+
+    public List<String> getEngagementEditorsList() {
+        try {
+            waitUntilVisibility(fluidContainer, 5);
+        } catch (WebDriverException ignore) {
+        }
+        List<String> engagementManagesList = new ArrayList<String>();
+        for (WebElement s : driver.findElements(By.xpath("//div[@name='Engagement.Editor']//div[@class='item']/div[1]"))) {
             engagementManagesList.add(s.getAttribute("textContent"));
         }
         return engagementManagesList;

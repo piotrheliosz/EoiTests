@@ -62,24 +62,22 @@ public class CompareDeliverables {
         List<String> extractDeliverableIdsList = extractDeliverableIds.getList("Deliverable ID");
         for (String extractedDeliverableId : extractDeliverableIdsList) {
 
-
             String extractedTitle = extractDeliverableTitles.getSingle(extractedDeliverableId + "->Title");
             String eoiTitle = "";
 
             try {
                 eoiTitle = eoiDeliverablesTitles.getSingle(extractedDeliverableId + "->Deliverable Title");
+                try {
+                    assertEquals(extractedTitle.trim().replaceAll(" +", " "),
+                            eoiTitle.trim().replaceAll(" +", " "));
+                } catch (AssertionError error) {
+                    System.out.println(++i + ". " + error
+                            + "\nExtracted Deliverable Id: " + extractedDeliverableId
+                            //+ "\nExtracted Title: " + extractedTitle
+                            //+ "\nEoi Title: " + eoiTitle
+                            + "\n");
+                }
             } catch (RuntimeException ignore) {
-            }
-
-            try {
-                assertEquals(extractedTitle.trim().replaceAll(" +", " "),
-                        eoiTitle.trim().replaceAll(" +", " "));
-            } catch (AssertionError error) {
-                System.out.println(++i + ". " + error
-                        + "\nExtracted Deliverable Id: " + extractedDeliverableId
-                        //+ "\nExtracted Title: " + extractedTitle
-                        //+ "\nEoi Title: " + eoiTitle
-                        + "\n");
             }
         }
     }

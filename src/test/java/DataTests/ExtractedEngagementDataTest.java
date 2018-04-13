@@ -77,13 +77,13 @@ public class ExtractedEngagementDataTest extends Scenario {
         EngagementsPage engagementsPage = new EngagementsPage(driver);
 
         for (int i = 0; i < engagementsIds.size(); i++) {
-            String objective = null;
+            String objective = "";
+            String id = engagementsIds.get(i);
+            engagementsPage.searchForEngagementOnGridById(id);
+            engagementsPage.selectFoundEngagement();
+            engagementsPage.openEditPopUp();
+            objective = engagementsObjectives.get(i);
             try {
-                String id = engagementsIds.get(i);
-                engagementsPage.searchForEngagementOnGridById(id);
-                engagementsPage.selectFoundEngagement();
-                engagementsPage.openEditPopUp();
-                objective = engagementsObjectives.get(i);
                 try {
                     assertEquals(engagementsPage.getObjective(), objective);
                 } catch (TimeoutException e) {
@@ -277,6 +277,7 @@ public class ExtractedEngagementDataTest extends Scenario {
 
             List<String> eoiIds = new ArrayList<String>();
             for (String eoiPartner : engagementsPage.getFoundEngagementPartnersList()) {
+
                 String[] bits = eoiPartner.split("\\(");
 
                 String eoiId = "";
@@ -284,12 +285,14 @@ public class ExtractedEngagementDataTest extends Scenario {
                 try {
                     eoiId = bits[bits.length - 1].substring(0, bits[bits.length - 1].length() - 1);
                 } catch (StringIndexOutOfBoundsException e) {
+                    e.printStackTrace();
                     engagementsPage.takeScreenShot("StringIndexOutOfBoundsException");
                 }
 
                 eoiIds.add(eoiId);
-                if (eoiIds.size() == 9 && engagementsPage.footedIsDisplayed()) {
-                    engagementsPage.goToAnotherPage();
+
+                while (engagementsPage.goToAnotherPageButtonIsDisplayed()) {
+                    engagementsPage.goToAnotherPageButton().click();
                     for (String eoiPartner2 : engagementsPage.getFoundEngagementPartnersList()) {
                         String[] bits2 = eoiPartner2.split("\\(");
                         String eoiId2 = bits2[bits2.length - 1].substring(0, bits2[bits2.length - 1].length() - 1);

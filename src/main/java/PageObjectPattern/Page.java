@@ -69,6 +69,19 @@ public class Page {
         }
     }
 
+    boolean displayedStaleWebElement(WebElement element) {
+        int attempts = 0;
+        while (attempts < 2) {
+            try {
+                element.isDisplayed();
+                break;
+            } catch (StaleElementReferenceException ignored) {
+            }
+            attempts++;
+        }
+        return false;
+    }
+
     void loadingElement() {
         new WebDriverWait(driver, 20).until(ExpectedConditions.invisibilityOfAllElements
                 (driver.findElements(By.xpath("//div[contains(@class, 'loader')]"))));
@@ -89,8 +102,8 @@ public class Page {
         return (extractIds.getList("Engagement ID"));
     }
 
-    public Set<String> getEngagementsIdsSet(String filePath) throws IOException {
-        ReportReader extractIds = new ReportReader(filePath, "Engagement", "Engagement ID");
+    public Set<String> getEngagementsIdsSet(String filePath, String sheetName) throws IOException {
+        ReportReader extractIds = new ReportReader(filePath, sheetName, "Engagement ID");
         return (extractIds.getSet("Engagement ID"));
     }
 

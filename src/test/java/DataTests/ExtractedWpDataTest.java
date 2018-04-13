@@ -23,6 +23,7 @@ public class ExtractedWpDataTest extends Scenario {
         ReportReader extractTitles = new ReportReader(filePath, "WorkPackage", "Engagement ID->Title");
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
+        engagementsPage.navigateToEngegementOverviewPage();
 
         for (String id : engagementsPage.getWpEngagementsIdsSet(filePath)) {
             engagementsPage.searchForEngagementOnGridById(id);
@@ -52,8 +53,9 @@ public class ExtractedWpDataTest extends Scenario {
         ReportReader extractDesc = new ReportReader(filePath, "WorkPackage", "Engagement ID->Work Package ID->Description");
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
+        engagementsPage.navigateToEngegementOverviewPage();
 
-        for (String engagementId : engagementsPage.getEngagementsIdsList(filePath)) {
+        for (String engagementId : engagementsPage.getEngagementsIdsSet(filePath, "WorkPackage")) {
             engagementsPage.searchForEngagementOnGridById(engagementId);
             engagementsPage.selectFoundEngagement();
 
@@ -88,8 +90,9 @@ public class ExtractedWpDataTest extends Scenario {
         ReportReader extractWpPartners = new ReportReader(filePath, "WorkPackage", "Engagement ID->Work Package ID->Partners");
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
+        engagementsPage.navigateToEngegementOverviewPage();
 
-        for (String engagementId : engagementsPage.getEngagementsIdsList(filePath)) {
+        for (String engagementId : engagementsPage.getEngagementsIdsSet(filePath, "WorkPackage")) {
 
             engagementsPage.searchForEngagementOnGridById(engagementId);
             engagementsPage.selectFoundEngagement();
@@ -130,6 +133,7 @@ public class ExtractedWpDataTest extends Scenario {
     @Test(enabled = true, priority = 3)
     public void compareLeadingPartner() throws IOException, InterruptedException {
         EngagementsPage engagementsPage = new EngagementsPage(driver);
+        engagementsPage.navigateToEngegementOverviewPage();
 
         for (String engagementId : engagementsPage.getWpEngagementsIdsSet(filePath)) {
 

@@ -18,7 +18,7 @@ public class WpEditIsEnable extends Scenario {
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
 
-        for (String engagementId : engagementsPage.getEngagementsIdsSet(filePath)) {
+        for (String engagementId : engagementsPage.getEngagementsIdsSet(filePath, "WorkPackage")) {
 
             engagementsPage.searchForEngagementOnGridById(engagementId);
             engagementsPage.selectFoundEngagement();

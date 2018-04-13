@@ -11,7 +11,7 @@ import static org.testng.AssertJUnit.assertTrue;
 
 public class CompareLineCostsProperty {
 
-    private String extractDataPath = "extracts\\KISSExtract_Cost_Lines.xls";
+    private String extractDataPath = "extracts\\KISSExtract_Property_All_BP2017Amendment.xls";
     private String eoiDataPath = "eoiData\\eoi_property_costLines_result.xls";
 
     @Test
@@ -19,9 +19,9 @@ public class CompareLineCostsProperty {
 
         //EXTRACTED DATA
         ReportReader extractCostLineIds = new ReportReader
-                (extractDataPath, "Cost Line", "Cost Line ID");
+                (extractDataPath, "Property", "Cost Line ID");
         ReportReader extractEngagementsIds = new ReportReader
-                (extractDataPath, "Cost Line", "Cost Line ID->Engagement ID");
+                (extractDataPath, "Property", "Cost Line ID->Engagement ID");
 
         //EOI DATA
         ReportReader eoiCostLineIds = new ReportReader
@@ -42,7 +42,10 @@ public class CompareLineCostsProperty {
                 try {
                     assertTrue(eoiCostLineIds.getList("Cost Line ID").contains(extractedCostLineId));
                 } catch (AssertionError error) {
-                    System.out.println("\n" + ++i + ". Engagement ID: " + extractedEngagementId + "\nMissing Line Cost: " + extractedCostLineId);
+                    ReportReader excludedIds = new ReportReader("ListOfEngagementsWithoutEditorField.xls", "Engagement Id", "Engagement Id");
+                    if(!excludedIds.getList("Engagement Id").contains(extractedEngagementId)) {
+                        System.out.println("\n" + ++i + ". Engagement ID: " + extractedEngagementId + "\nMissing Line Cost: " + extractedCostLineId);
+                    }
                 }
             }
         }
