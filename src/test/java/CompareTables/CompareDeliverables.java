@@ -1,7 +1,6 @@
 package CompareTables;
 
 import Reports.ReportReader;
-import jxl.read.biff.BiffException;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -13,7 +12,7 @@ import static org.testng.AssertJUnit.assertEquals;
 public class CompareDeliverables {
 
     @Test
-    public void deliverablesShouldBeExtracted() throws IOException, BiffException {
+    public void deliverablesShouldBeExtracted() throws IOException{
 
         //EXTRACTED DATA
         String extractDataPath = "extracts\\KISSExtract_Deliverable_BP2018.xls";
