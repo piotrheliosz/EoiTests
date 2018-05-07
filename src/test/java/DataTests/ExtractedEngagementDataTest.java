@@ -17,7 +17,9 @@ import static org.testng.Assert.assertTrue;
 
 public class ExtractedEngagementDataTest extends Scenario {
 
-    private String filePath = "extracts\\KISSExtract_Engagement_BP2017Amendment.xls";
+    //extracts/KISSExtract_Property_ALL_BP2018.xls
+    //private String filePath = "extracts\\KISSExtract_Engagement_BP2017Amendment.xls";
+    private String filePath = "extracts\\KISSExtract_Property_ALL_BP2018.xls";
 
     @Test(enabled = true, priority = 0)
     public void compareId() throws IOException, InterruptedException {
@@ -26,7 +28,7 @@ public class ExtractedEngagementDataTest extends Scenario {
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
 
-        for (String id : engagementsPage.getEngagementsIdsList(filePath)) {
+        for (String id : engagementsPage.getEngagementsIdsSet(filePath, "Personnel Property")) {
             try {
                 engagementsPage.searchForEngagementOnGridById(id);
                 assertEquals(engagementsPage.foundEngagementId(), id);
@@ -35,6 +37,9 @@ public class ExtractedEngagementDataTest extends Scenario {
             }
             engagementsPage.engagementIdFilter.clear();
         }
+        int i = 0;
+        String s =  String.valueOf(i * i);
+        int ii = Integer.valueOf(s) * i;
     }
 
     @Test(enabled = true, priority = 1)

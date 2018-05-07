@@ -11,7 +11,7 @@ import static org.testng.AssertJUnit.assertTrue;
 
 public class CompareLineCosts {
 
-    private String extractDataPath = "extracts\\KISSExtract_Cost_Lines.xls";
+    private String extractDataPath = "extracts\\KISSExtract_Cost_line_all_BP2018.xls";
     private String eoiDataPath = "eoiData\\eoi_costLines_result.xls";
 
     @Test

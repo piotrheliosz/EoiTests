@@ -24,13 +24,13 @@ public class EngagementsPerformancePage extends Page {
 
     public void clickPartnersTab() {
         new WebDriverWait(driver, 5).until(ExpectedConditions
-                .elementToBeClickable(By.xpath("//div[@id='partdiv-" + getPartId(1) + "']//li[text()='Partners']")))
+                .elementToBeClickable(By.xpath("//div[@id='partdiv-" + getPartId(2) + "']//li[text()='Partners']")))
                 .click();
     }
 
     public void clickAddNewPartnerButton() {
         new WebDriverWait(driver, 5).until(ExpectedConditions
-                .elementToBeClickable(By.xpath("//div[@id='partdiv-" + getPartId(1) + "']//div[@id='New']")))
+                .elementToBeClickable(By.xpath("//div[@id='partdiv-" + getPartId(2) + "']//div[@id='New']")))
                 .click();
     }
 
@@ -79,7 +79,7 @@ public class EngagementsPerformancePage extends Page {
     public boolean partnerIsDisplayedOnGrid(String partnerName) {
         try {
             return new WebDriverWait(driver, 10).until(ExpectedConditions
-                    .elementToBeClickable(By.xpath("//tbody[@id='rgridbody-" + getPartId(1) + "']//td[contains(text(),'" + partnerName + "')][1]")))
+                    .elementToBeClickable(By.xpath("//tbody[@id='rgridbody-" + getPartId(2) + "']//td[contains(text(),'" + partnerName + "')][1]")))
                     .isDisplayed();
         } catch (TimeoutException e) {
             return false;

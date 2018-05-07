@@ -13,7 +13,7 @@ import static org.testng.AssertJUnit.assertTrue;
 
 public class AddAndRemoveEngagementTest extends Scenario {
 
-    private String engagementName = UUID.randomUUID().toString();
+    private static String engagementName = UUID.randomUUID().toString();
 
     @Test(priority = 1)
     public void engagementShouldBeAdded() {

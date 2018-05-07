@@ -11,9 +11,10 @@ import static org.testng.AssertJUnit.assertTrue;
 public class Roles extends Scenario {
 
     @Test
-    public void managerShouldBeAdded() throws IOException, InterruptedException {
+    public void managerShouldBeAdded() throws IOException, InterruptedException{
 
-        String filePath = "extracts\\KISSExtract_Engagement_BP2017Amendment.xls";
+        //String filePath = "extracts\\KISSExtract_Engagement_BP2017Amendment.xls";
+        String filePath = "extracts\\KISSExtract_Engagement_BP2018.xls";
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
         engagementsPage.navigateToEngegementOverviewPage();
@@ -42,7 +43,7 @@ public class Roles extends Scenario {
     @Test
     public void editorShouldBeAdded() throws IOException, InterruptedException {
 
-        String filePath = "extracts\\KISSExtract_Engagement_BP2017Amendment.xls";
+        String filePath = "BP2018_Engagements_Ids.xls";
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
         engagementsPage.navigateToEngegementOverviewPage();

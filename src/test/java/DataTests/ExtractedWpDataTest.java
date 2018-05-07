@@ -16,7 +16,8 @@ import static org.testng.AssertJUnit.assertEquals;
 
 public class ExtractedWpDataTest extends Scenario {
 
-    private String filePath = "extracts\\KISSExtract_WorkPackage_BP2017Amendment.xls";
+    //private String filePath = "extracts\\KISSExtract_WorkPackage_BP2017Amendment.xls";
+    private String filePath = "extracts\\KISSExtract_WorkPackage_BP2018.xls";
 
     @Test(enabled = true, priority = 0)
     public void compareWpTitle() throws InterruptedException, IOException {
@@ -35,7 +36,7 @@ public class ExtractedWpDataTest extends Scenario {
             }
 
             try {
-                assertEquals(engagementsPage.getWpTitlesList().size(), titlesExtracted.size());
+                //assertEquals(engagementsPage.getWpTitlesList().size(), titlesExtracted.size());
                 assertTrue(engagementsPage.getWpTitlesList().containsAll(titlesExtracted));
             } catch (AssertionError error) {
                 System.out.println(error + "\nEngagement Id: " + id
@@ -47,7 +48,7 @@ public class ExtractedWpDataTest extends Scenario {
         }
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test(enabled = true, priority = 1) //TODO no access to WP Edit from Engagement Overview grid
     public void compareWpDescription() throws InterruptedException, IOException {
         ReportReader extractWpIds = new ReportReader(filePath, "WorkPackage", "Engagement ID->Work Package ID");
         ReportReader extractDesc = new ReportReader(filePath, "WorkPackage", "Engagement ID->Work Package ID->Description");
@@ -84,7 +85,7 @@ public class ExtractedWpDataTest extends Scenario {
         }
     }
 
-    @Test(enabled = true, priority = 2)
+    @Test(enabled = true, priority = 2) //TODO no access to WP Edit from Engagement Overview grid
     public void compareWpPartners() throws InterruptedException, IOException {
         ReportReader extractWpIds = new ReportReader(filePath, "WorkPackage", "Engagement ID->Work Package ID");
         ReportReader extractWpPartners = new ReportReader(filePath, "WorkPackage", "Engagement ID->Work Package ID->Partners");

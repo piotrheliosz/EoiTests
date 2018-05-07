@@ -1,50 +1,123 @@
 package CompareTables;
 
-import PageObjectPattern.Page;
 import Reports.ReportReader;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
 public class CompareLineCostsProperty {
-
-    private String extractDataPath = "extracts\\KISSExtract_Property_All_BP2017Amendment.xls";
+    //C:\workspace\EoiTests\extracts\KISSExtract_BP2018_Cost_Line_Properties.xlsC:\workspace\EoiTests\extracts\KISSExtract_Property_ALL_BP2018.xls
+    private String extractDataPath = "extracts\\KISSExtract_Property_ALL_BP2018.xls";
     private String eoiDataPath = "eoiData\\eoi_property_costLines_result.xls";
 
     @Test
-    public void allCostsLinesPropertyShouldBeExtracted() throws IOException {
+    public void costsLinesShouldBeExtracted() throws IOException {
 
         //EXTRACTED DATA
         ReportReader extractCostLineIds = new ReportReader
-                (extractDataPath, "Property", "Cost Line ID");
+                (extractDataPath, "Personnel Property", "Cost Line ID");
         ReportReader extractEngagementsIds = new ReportReader
-                (extractDataPath, "Property", "Cost Line ID->Engagement ID");
+                (extractDataPath, "Personnel Property", "Cost Line ID->Engagement ID");
 
         //EOI DATA
         ReportReader eoiCostLineIds = new ReportReader
-                (eoiDataPath, "costLines_result", "Cost Line ID");
-
-        List<String> engagementsWithoutPrivilegesToEdit = Page.getListOfEngagementsWithoutPrivilegesToEdit();
-        System.out.println("engagementsWithoutPrivilegesToEdit: " + engagementsWithoutPrivilegesToEdit);
+                (eoiDataPath, "costLines_result", "COST LINE ID");
 
         int i = 0;
-        List<String> extractCostLineIdsList = extractCostLineIds.getList("Cost Line ID");
-
-        for (String extractedCostLineId : extractCostLineIdsList) {
+        for (String extractedCostLineId : extractCostLineIds.getSet("Cost Line ID")) {
 
             String extractedEngagementId = extractEngagementsIds.getSingle(extractedCostLineId + "->Engagement ID");
+            try {
+                assertTrue(eoiCostLineIds.getList("COST LINE ID").contains(extractedCostLineId));
+            } catch (AssertionError error) {
+                System.out.println("\n" + ++i + ". ENGAGEMENT ID: " + extractedEngagementId + "\nMissing Line Cost: " + extractedCostLineId);
+            }
+        }
+    }
 
-            if (!engagementsWithoutPrivilegesToEdit.contains(extractedEngagementId)) {
+    @Test
+    public void nameShouldBeExtracted() throws IOException {
 
-                try {
-                    assertTrue(eoiCostLineIds.getList("Cost Line ID").contains(extractedCostLineId));
-                } catch (AssertionError error) {
-                    ReportReader excludedIds = new ReportReader("ListOfEngagementsWithoutEditorField.xls", "Engagement Id", "Engagement Id");
-                    if(!excludedIds.getList("Engagement Id").contains(extractedEngagementId)) {
-                        System.out.println("\n" + ++i + ". Engagement ID: " + extractedEngagementId + "\nMissing Line Cost: " + extractedCostLineId);
+        //EXTRACTED DATA
+        ReportReader extractEngagementsIds = new ReportReader
+                (extractDataPath, "Personnel Property", "Cost Line ID->Engagement ID");
+        ReportReader extractCostLineIds = new ReportReader
+                (extractDataPath, "Personnel Property", "Cost Line ID");
+        ReportReader extractPropertyName = new ReportReader
+                (extractDataPath, "Personnel Property", "Cost Line ID->Name");
+
+        //EOI DATA
+        ReportReader eoiPropertyName = new ReportReader
+                (eoiDataPath, "costLines_result", "COST LINE ID->NAME");
+
+        int i = 0;
+        for (String extractedCostLineId : extractCostLineIds.getSet("Cost Line ID")) {
+
+            List<String> eoiPropertyNames = eoiPropertyName.getList(extractedCostLineId + "->NAME");
+            List<String> extractedPropertyNames = extractPropertyName.getList(extractedCostLineId + "->Name");
+
+            try {
+                assertTrue(eoiPropertyNames.containsAll(extractedPropertyNames));
+            } catch (AssertionError error) {
+                System.out.println("\n" + ++i
+                        + ". ENGAGEMENT ID: "
+                        + extractEngagementsIds.getSingle(extractedCostLineId + "->Engagement ID")
+                        + "\nMissing Line Cost: " + extractedCostLineId);
+            }
+        }
+    }
+
+    @Test
+    public void valueShouldBeExtracted() throws IOException {
+        //EXTRACTED DATA
+        ReportReader extractEngagementsIds = new ReportReader
+                (extractDataPath, "Personnel Property", "Engagement ID");
+        ReportReader extractCostLineIds = new ReportReader
+                (extractDataPath, "Personnel Property", "Engagement ID->Cost Line ID");
+        ReportReader extractPropertyName = new ReportReader
+                (extractDataPath, "Personnel Property", "Engagement ID->Cost Line ID->Name");
+        ReportReader extractPropertyValues = new ReportReader
+                (extractDataPath, "Personnel Property", "Engagement ID->Cost Line ID->Name->Value");
+
+        //EOI DATA
+        ReportReader eoiPropertyValue = new ReportReader
+                (eoiDataPath, "costLines_result", "ENGAGEMENT ID->COST LINE ID->NAME->VALUE");
+        int i = 0;
+
+        for (String engagementId : extractEngagementsIds.getSet("Engagement ID")) {
+
+            for (String extractedCostLineId : extractCostLineIds.getSet(engagementId + "->Cost Line ID")) {
+
+                for (String extractName : extractPropertyName.getList(engagementId + "->" + extractedCostLineId + "->Name")) {
+
+                    String extractValue = "";
+                    String eoiValue = "";
+
+                    try {
+                        extractValue = extractPropertyValues.getSingle(engagementId + "->" + extractedCostLineId + "->" + extractName + "->Value");
+                    } catch (RuntimeException e) {
+                        System.out.println("EXTRACT DATA NOT FOUND: " + engagementId + "->" + extractedCostLineId + "->" + extractName + "->Value");
+                    }
+
+                    try {
+                        eoiValue = eoiPropertyValue.getSingle(engagementId + "->" + extractedCostLineId + "->" + extractName + "->VALUE");
+                    } catch (RuntimeException e) {
+                        System.out.println("EOI DATA NOT FOUND: " + engagementId + "->" + extractedCostLineId + "->" + extractName + "->VALUE");
+                    }
+
+                    try {
+                        assertEquals(extractValue.trim().replaceAll(" +", " "), eoiValue.trim().replaceAll(" +", " "));
+                    } catch (AssertionError error) {
+                        if (!extractName.contains("DATE")) {
+                            System.out.println(error + "\n" + ++i
+                                    + ". ENGAGEMENT ID: " + engagementId
+                                    + "\nCost Line ID: " + extractedCostLineId
+                                    + "\nProperty Name: " + extractName + "\n");
+                        }
                     }
                 }
             }

@@ -11,7 +11,7 @@ import static org.testng.AssertJUnit.assertEquals;
 
 public class CompareObjectives {
 
-    private String extractDataPath = "extracts\\KISSExtract_Objective_BP2017Amendment.xls";
+    private String extractDataPath = "extracts\\KISSExtract_Objective_BP2018.xls";
     private String eioDataPath = "eoiData\\eoi_objective_result.xls";
 
 
@@ -19,6 +19,8 @@ public class CompareObjectives {
     public void objectiveIdShouldBeExtracted() throws IOException {
 
         //EXTRACTED DATA
+        ReportReader extractEngagementsIds = new ReportReader
+                (extractDataPath, "Objective", "Objective ID->Engagement ID");
         ReportReader extractObjectiveIds = new ReportReader
                 (extractDataPath, "Objective", "Objective ID");
 
@@ -27,12 +29,12 @@ public class CompareObjectives {
                 (eioDataPath, "objective_result", "Objective ID");
 
         int i = 0;
-        List<String> extractObjectiveIdsList = extractObjectiveIds.getList("Objective ID");
-        for (String extractedObjectiveId : extractObjectiveIdsList) {
+        for (String extractedObjectiveId : extractObjectiveIds.getList("Objective ID")) {
             try {
                 assertTrue(eoiObjectiveIds.getList("Objective ID").contains(extractedObjectiveId));
             } catch (AssertionError error) {
-                System.out.println(++i + ". Missing Extracted Objective Id: " + extractedObjectiveId);
+                System.out.println(++i + ". Missing Extracted Objective Id: " + extractedObjectiveId
+                + " | Engagements Id: " + extractEngagementsIds.getSingle(extractedObjectiveId + "->Engagement ID"));
             }
         }
     }

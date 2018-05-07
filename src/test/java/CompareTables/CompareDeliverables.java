@@ -16,7 +16,7 @@ public class CompareDeliverables {
     public void deliverablesShouldBeExtracted() throws IOException, BiffException {
 
         //EXTRACTED DATA
-        String extractDataPath = "extracts\\KISSExtract_Deliverable_BP2017Amendment.xls";
+        String extractDataPath = "extracts\\KISSExtract_Deliverable_BP2018.xls";
 
         ReportReader extractDeliverableIds = new ReportReader
                 (extractDataPath, "Deliverable", "Deliverable ID");
@@ -44,7 +44,7 @@ public class CompareDeliverables {
     public void compareDeliverablesTitles() throws IOException {
 
         //EXTRACTED DATA
-        String extractDataPath = "extracts\\KISSExtract_Deliverable_BP2017Amendment.xls";
+        String extractDataPath = "extracts\\KISSExtract_Deliverable_BP2018.xls";
 
         ReportReader extractDeliverableIds = new ReportReader
                 (extractDataPath, "Deliverable", "Deliverable ID");
@@ -73,8 +73,8 @@ public class CompareDeliverables {
                 } catch (AssertionError error) {
                     System.out.println(++i + ". " + error
                             + "\nExtracted Deliverable Id: " + extractedDeliverableId
-                            //+ "\nExtracted Title: " + extractedTitle
-                            //+ "\nEoi Title: " + eoiTitle
+                            + "\nExtracted Title: " + extractedTitle
+                            + "\nEoi Title: " + eoiTitle
                             + "\n");
                 }
             } catch (RuntimeException ignore) {

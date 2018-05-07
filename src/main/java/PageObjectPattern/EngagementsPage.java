@@ -113,7 +113,8 @@ public class EngagementsPage extends Page {
     public String foundEngagementId() {
         try {
             return driver.findElement(By.xpath("//table[1]/tbody[@class='rgrid rgridtree']//td[3]")).getText();
-        } catch (NoSuchElementException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
             return "NOT FOUND";
         }
     }
@@ -123,7 +124,8 @@ public class EngagementsPage extends Page {
             return driver.findElement(By.xpath("//table[1]/tbody[@class='rgrid rgridtree']//td[2]")).getText()
                     .replace("\uE65A", "")
                     .replace("\n", "");
-        } catch (NoSuchElementException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
             return "NOT FOUND";
         }
     }
@@ -131,7 +133,8 @@ public class EngagementsPage extends Page {
     public String foundEngagementManagementUnit() {
         try {
             return driver.findElement(By.xpath("//table[1]/tbody[@class='rgrid rgridtree']//td[4]")).getText();
-        } catch (NoSuchElementException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
             return "NOT FOUND";
         }
     }
@@ -139,7 +142,8 @@ public class EngagementsPage extends Page {
     public String foundEngagementType() {
         try {
             return driver.findElement(By.xpath("//table[1]/tbody[@class='rgrid rgridtree']//td[6]")).getText();
-        } catch (NoSuchElementException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
             return "NOT FOUND";
         }
     }
@@ -147,7 +151,8 @@ public class EngagementsPage extends Page {
     public String foundEngagementBla() {
         try {
             return driver.findElement(By.xpath("//table[1]/tbody[@class='rgrid rgridtree']//td[5]")).getText();
-        } catch (NoSuchElementException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
             return "NOT FOUND";
         }
     }
@@ -157,17 +162,22 @@ public class EngagementsPage extends Page {
             waitUntilVisibility(scopeTextarea, 5);
             return scopeTextarea.getAttribute("value");
         } catch (Exception e) {
+            e.printStackTrace();
             return "NOT_FOND";
         }
     }
 
-    public String getThematicField() {
-        try {
-            waitUntilVisibility(thematicField, 5);
-            return thematicField.getText();
-        } catch (Exception e) {
-            return "NOT_FOND";
-        }
+    public String getThematicField() throws IOException {
+        if(!foundEngagementType().contains("BCS")) {
+            try {
+                waitUntilVisibility(thematicField, 5);
+                return thematicField.getText();
+            } catch (Exception e) {
+                e.printStackTrace();
+                takeScreenShot("noThemeticField");
+                return "NOT_FOND";
+            }
+        }return "NOT_FOND";
     }
 
     public String getObjective() {
@@ -175,6 +185,7 @@ public class EngagementsPage extends Page {
             waitUntilVisibility(objectiveTextarea, 5);
             return objectiveTextarea.getAttribute("value");
         } catch (Exception e) {
+            e.printStackTrace();
             return "NOT_FOND";
         }
     }
@@ -184,11 +195,12 @@ public class EngagementsPage extends Page {
             waitUntilVisibility(wpDescTextArea, 5);
             return wpDescTextArea.getAttribute("value");
         } catch (Exception e) {
+            e.printStackTrace();
             return "NOT_FOND";
         }
     }
 
-    public List<String> getFoundEngagementPartnersList() throws InterruptedException {
+    public List<String> getFoundEngagementPartnersList() throws InterruptedException, IOException {
         partnersTab.click();
         List<String> partnersList = new ArrayList<String>();
         try {
@@ -207,7 +219,9 @@ public class EngagementsPage extends Page {
                     partnersList.add(partner);
                 }
             }
-        } catch (TimeoutException ignore) {
+        } catch (Exception e) {
+            e.printStackTrace();
+            takeScreenShot(e.toString().substring(0, 20));
         }
         return partnersList;
     }
