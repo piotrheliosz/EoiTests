@@ -36,12 +36,12 @@ public class Page {
         return null;
     }
 
-    WebElement waitUntilVisibility(WebElement element, int timeout) {
+    public WebElement waitUntilVisibility(WebElement element, int timeout) {
         loadingElement();
         return new WebDriverWait(driver, timeout).until(ExpectedConditions.visibilityOf(element));
     }
 
-    void clickStaleElementBy(By by) {
+    public void clickStaleElementBy(By by) {
         int attempts = 0;
         while (attempts < 2) {
             try {
@@ -53,7 +53,7 @@ public class Page {
         }
     }
 
-    void clickStaleWebElement(WebElement element) {
+    public void clickStaleWebElement(WebElement element) {
         int attempts = 0;
         while (attempts < 2) {
             try {
@@ -103,7 +103,7 @@ public class Page {
 
     public void clickHomeButton() throws IOException {
         try {
-            new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(By.id("homeButton"))).click();
+            new WebDriverWait(driver, 10).until(ExpectedConditions.elementToBeClickable(By.id("homeButton"))).click();
         } catch (TimeoutException e) {
             e.printStackTrace();
             takeScreenShot("clickHomeButton");

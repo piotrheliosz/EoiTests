@@ -344,10 +344,19 @@ public class EngagementsPage extends Page {
         loadingElement();
     }
 
+    private WebElement getEngagementOnPerformanceList(String engagementName) throws NoSuchElementException {
+        return driver.findElement(By.xpath("//*[text()='Engagement Performance']//..//*[contains(text(),'" + engagementName + "')]"));
+    }
+
+    public void goToEngagementPerformancePageByJs(String engagementName){
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", getEngagementOnPerformanceList(engagementName));
+    }
+
     public void goToEngagementsPerformanceSection() {
         Actions actions = new Actions(driver);
         actions.moveToElement(waitUntilVisibility(engagementTopMenu, 5)).perform();
         actions.moveToElement(waitUntilVisibility(engagementPerformanceSubmenu, 3)).perform();
         actions.moveToElement(waitUntilVisibility(firstEngagementFromSubmenu, 3)).click().perform();
     }
+
 }

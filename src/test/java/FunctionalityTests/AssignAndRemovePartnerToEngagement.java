@@ -11,7 +11,9 @@ import java.io.IOException;
 
 import static org.testng.AssertJUnit.assertTrue;
 
-public class AssignPartnerToEngagement extends Scenario {
+public class AssignAndRemovePartnerToEngagement extends Scenario {
+
+    private String engagementName = "ba2f6d06-fd60-4de5-9e06-1a05bbcb6233";
 
     @DataProvider(name = "partnersNames")
     public static Object[] partnerToAdd() {
@@ -20,12 +22,13 @@ public class AssignPartnerToEngagement extends Scenario {
     }
 
     @Test(dataProvider = "partnersNames")
-    public void partnerShouldBeAssignedToEngagement(String partnerToAdd) throws IOException {
+    public void partnersShouldBeAssignedToEngagement(String partnerToAdd) throws IOException {
+
         MainPage mainPage = new MainPage(driver);
         mainPage.navigateToEngagementsSection();
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
-        engagementsPage.goToEngagementsPerformanceSection();
+        engagementsPage.goToEngagementPerformancePageByJs(engagementName);
 
         EngagementsPerformancePage engagementsPerformancePage = new EngagementsPerformancePage(driver);
         engagementsPerformancePage.clickPartnersTab();
@@ -38,5 +41,24 @@ public class AssignPartnerToEngagement extends Scenario {
 
         mainPage.clickHomeButton();
     }
-}
 
+    @Test
+    public void partnersShouldBeRemovedFromEngagement() {
+
+        MainPage mainPage = new MainPage(driver);
+        mainPage.navigateToEngagementsSection();
+
+        EngagementsPage engagementsPage = new EngagementsPage(driver);
+        engagementsPage.goToEngagementPerformancePageByJs(engagementName);
+
+        EngagementsPerformancePage engagementsPerformancePage = new EngagementsPerformancePage(driver);
+        engagementsPerformancePage.clickPartnersTab();
+        for (String partnerName : engagementsPerformancePage.getPartnersNameList()) {
+            engagementsPerformancePage.findPartnerOnGrid(partnerName).click();
+            engagementsPerformancePage.removePartnerFromEngagement();
+        }
+        engagementsPage.goToEngagementPerformancePageByJs(engagementName);
+
+        assertTrue(engagementsPerformancePage.getPartnersList().isEmpty());
+    }
+}
