@@ -28,7 +28,7 @@ public class ExtractedEngagementDataTest extends Scenario {
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
 
-        for (String id : engagementsPage.getEngagementsIdsSet(filePath, "Personnel Property")) {
+        for (String id : engagementsPage.getEngagementsIdsSetFromFile(filePath, "Personnel Property")) {
             try {
                 engagementsPage.searchForEngagementOnGridById(id);
                 assertEquals(engagementsPage.foundEngagementId(), id);
@@ -48,7 +48,7 @@ public class ExtractedEngagementDataTest extends Scenario {
         mainPage.navigateToEngagementsSection();
 
         ReportReader extract = new ReportReader(filePath, "Engagement", "Engagement ID,Name");
-        List<String> engagementsIds = mainPage.getEngagementsIdsList(filePath);
+        List<String> engagementsIds = mainPage.getEngagementsIdsListFromFile(filePath);
         List<String> engagementsNames = (extract.getList("Name"));
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);

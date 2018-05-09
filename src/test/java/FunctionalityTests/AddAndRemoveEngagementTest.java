@@ -19,7 +19,7 @@ public class AddAndRemoveEngagementTest extends Scenario {
     public void engagementShouldBeAdded() {
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
-        engagementsPage.navigateToEngegementOverviewPage();
+        engagementsPage.navigateToEngagementOverviewPage();
         engagementsPage.clickAddNewEngagementButton();
 
         NewEngagementPage newEngagementsPage = new NewEngagementPage(driver);
@@ -42,7 +42,7 @@ public class AddAndRemoveEngagementTest extends Scenario {
     public void engagementShouldBeRemoved() {
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
-        engagementsPage.navigateToEngegementOverviewPage();
+        engagementsPage.navigateToEngagementOverviewPage();
         engagementsPage.searchForEngagementOnGridByName(engagementName);
         engagementsPage.selectFoundEngagement();
         engagementsPage.deleteSelectedEngagement();

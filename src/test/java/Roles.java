@@ -17,12 +17,12 @@ public class Roles extends Scenario {
         String filePath = "extracts\\KISSExtract_Engagement_BP2018.xls";
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
-        engagementsPage.navigateToEngegementOverviewPage();
+        engagementsPage.navigateToEngagementOverviewPage();
 
         List<String> engagementsWithNoPrivilegeToEdit = new ArrayList<String>();
 
         int i = 0;
-        for (String id : engagementsPage.getEngagementsIdsList(filePath)) {
+        for (String id : engagementsPage.getEngagementsIdsListFromFile(filePath)) {
 
             engagementsPage.searchForEngagementOnGridById(id);
             engagementsPage.selectFoundEngagement();
@@ -46,12 +46,12 @@ public class Roles extends Scenario {
         String filePath = "BP2018_Engagements_Ids.xls";
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
-        engagementsPage.navigateToEngegementOverviewPage();
+        engagementsPage.navigateToEngagementOverviewPage();
 
         List<String> engagementsWithNoPrivilegeToEdit = new ArrayList<String>();
 
         int i = 0;
-        for (String id : engagementsPage.getEngagementsIdsList(filePath)) {
+        for (String id : engagementsPage.getEngagementsIdsListFromFile(filePath)) {
 
             engagementsPage.searchForEngagementOnGridById(id);
             engagementsPage.selectFoundEngagement();

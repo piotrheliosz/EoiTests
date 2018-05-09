@@ -3,7 +3,6 @@ package PageObjectPattern;
 import Reports.ReportReader;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -24,9 +23,6 @@ public class Page {
         Page.driver = driver;
         PageFactory.initElements(driver, this);
     }
-
-    @FindBy(id = "homeButton")
-    private WebElement homeButton;
 
     public static String getCredentials(String credential) {
         try {
@@ -69,19 +65,6 @@ public class Page {
         }
     }
 
-    boolean displayedStaleWebElement(WebElement element) {
-        int attempts = 0;
-        while (attempts < 2) {
-            try {
-                element.isDisplayed();
-                break;
-            } catch (StaleElementReferenceException ignored) {
-            }
-            attempts++;
-        }
-        return false;
-    }
-
     void loadingElement() {
         new WebDriverWait(driver, 20).until(ExpectedConditions.invisibilityOfAllElements
                 (driver.findElements(By.xpath("//div[contains(@class, 'loader')]"))));
@@ -92,39 +75,38 @@ public class Page {
                 .getAttribute("id").substring(8);
     }
 
-    public void takeScreenShot(String fileName) throws IOException, WebDriverException {
+    public void takeScreenShot(String fileName) throws IOException {
         File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
         FileUtils.copyFile(scrFile, new File("screenshots\\" + fileName + ".png"));
     }
 
-    public List<String> getEngagementsIdsList(String filePath) throws IOException {
+    public List<String> getEngagementsIdsListFromFile(String filePath) throws IOException {
         ReportReader extractIds = new ReportReader(filePath, "Engagement", "Engagement ID");
         return (extractIds.getList("Engagement ID"));
     }
 
-    public Set<String> getEngagementsIdsSet(String filePath, String sheetName) throws IOException {
+    public Set<String> getEngagementsIdsSetFromFile(String filePath, String sheetName) throws IOException {
         ReportReader extractIds = new ReportReader(filePath, sheetName, "Engagement ID");
         return (extractIds.getSet("Engagement ID"));
     }
 
-    public Set<String> getWpEngagementsIdsSet(String filePath) throws IOException {
+    public Set<String> getWpEngagementsIdsSetFromFile(String filePath) throws IOException {
         ReportReader extractIds = new ReportReader(filePath, "WorkPackage", "Engagement ID");
         return (extractIds.getSet("Engagement ID"));
     }
 
-    public static List<String> getListOfEngagementsWithoutPrivilegesToEdit() throws IOException {
-        String filePath = "ListOfEngagementsWithoutPrivilegesToEdit.xls";
-        ReportReader extractIds = new ReportReader(filePath, "Engagement ID", "Engagement ID");
-        return extractIds.getList("Engagement ID");
-    }
-
-    public void navigateToEngegementOverviewPage() {
+    public void navigateToEngagementOverviewPage() {
         if (!driver.getCurrentUrl().contains("engagements-overview")) {
             driver.navigate().to(getCredentials("baseUrl") + "/portal/kicinnoenergy-acc/page/engagements-overview/");
         }
     }
 
-    public void clickHomeButton(){
-        waitUntilVisibility(homeButton,5).click();
+    public void clickHomeButton() throws IOException {
+        try {
+            new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(By.id("homeButton"))).click();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+            takeScreenShot("clickHomeButton");
+        }
     }
 }

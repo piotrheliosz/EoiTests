@@ -16,7 +16,7 @@ public class EngagementsPage extends Page {
     @FindBy(xpath = "//input[contains(@id, 'Name')]")
     private WebElement engagementNameFilter;
     @FindBy(xpath = "//li[text()='Partners']")
-    WebElement partnersTab;
+    private WebElement partnersTab;
     @FindBy(xpath = "(//div[contains(@id, 'partTitle')]//div[@id='Edit'])[1]")
     private WebElement editEngagementButton;
     @FindBy(xpath = "(//div[contains(@id, 'partTitle')]//div[@id='Edit'])[2]")
@@ -30,7 +30,7 @@ public class EngagementsPage extends Page {
     @FindBy(xpath = "//i[@class='icon-close color-dark-hover']")
     private WebElement closePopUp;
     @FindBy(xpath = "//li[text()='Work Packages / Sections']")
-    private WebElement wpTab;
+    public WebElement wpTab;
     @FindBy(xpath = "//div[@class='container-fluid']")
     private WebElement fluidContainer;
     @FindBy(className = "overlay")
@@ -78,7 +78,7 @@ public class EngagementsPage extends Page {
                             (By.xpath("//table[1]/tbody[@class='rgrid rgridtree']/tr[contains(@id, 'row')]"), 1));
             return driver.findElement(By.xpath("//*[text()=' " + engagementName + "']")).isDisplayed();
         } catch (WebDriverException e) {
-            System.out.println("Engagement name NOT FOUND: " + engagementName);
+            System.out.println("Engagement Name NOT FOUND: " + engagementName);
             loadingElement();
             return false;
         }
@@ -159,8 +159,7 @@ public class EngagementsPage extends Page {
 
     public String getScope() throws IOException {
         try {
-            waitUntilVisibility(scopeTextarea, 5);
-            return scopeTextarea.getAttribute("value");
+            return waitUntilVisibility(scopeTextarea, 5).getAttribute("value");
         } catch (Exception e) {
             e.printStackTrace();
             return "NOT_FOND";
@@ -168,7 +167,7 @@ public class EngagementsPage extends Page {
     }
 
     public String getThematicField() throws IOException {
-        if(!foundEngagementType().contains("BCS")) {
+        if (!foundEngagementType().contains("BCS")) {
             try {
                 waitUntilVisibility(thematicField, 5);
                 return thematicField.getText();
@@ -177,13 +176,13 @@ public class EngagementsPage extends Page {
                 takeScreenShot("noThemeticField");
                 return "NOT_FOND";
             }
-        }return "NOT_FOND";
+        }
+        return "NOT_FOND";
     }
 
     public String getObjective() {
         try {
-            waitUntilVisibility(objectiveTextarea, 5);
-            return objectiveTextarea.getAttribute("value");
+            return waitUntilVisibility(objectiveTextarea, 5).getAttribute("value");
         } catch (Exception e) {
             e.printStackTrace();
             return "NOT_FOND";
@@ -192,8 +191,7 @@ public class EngagementsPage extends Page {
 
     public String getWpDescription() {
         try {
-            waitUntilVisibility(wpDescTextArea, 5);
-            return wpDescTextArea.getAttribute("value");
+            return waitUntilVisibility(wpDescTextArea, 5).getAttribute("value");
         } catch (Exception e) {
             e.printStackTrace();
             return "NOT_FOND";
@@ -204,7 +202,8 @@ public class EngagementsPage extends Page {
         partnersTab.click();
         List<String> partnersList = new ArrayList<String>();
         try {
-            new WebDriverWait(driver, 5).until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath("//table/tbody[@class='rgrid rgridlist']/tr/td[1]"), 0));
+            new WebDriverWait(driver, 5)
+                    .until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath("//table/tbody[@class='rgrid rgridlist']/tr/td[1]"), 0));
 
             try {
                 for (WebElement partnerRow : driver.findElements(By.xpath("//table/tbody[@class='rgrid rgridlist']/tr/td[1]"))) {
@@ -228,8 +227,7 @@ public class EngagementsPage extends Page {
 
     public void closePopUp() throws IOException {
         try {
-            waitUntilVisibility(closePopUp, 5);
-            closePopUp.click();
+            waitUntilVisibility(closePopUp, 5).click();
             loadingElement();
         } catch (Exception ignore) {
         }
@@ -238,8 +236,7 @@ public class EngagementsPage extends Page {
     public void openEditPopUp() throws IOException {
         try {
             try {
-                waitUntilVisibility(editEngagementButton, 10);
-                editEngagementButton.click();
+                waitUntilVisibility(editEngagementButton, 10).click();
                 loadingElement();
                 waitUntilVisibility(closePopUp, 10);
             } catch (TimeoutException e) {
@@ -253,8 +250,7 @@ public class EngagementsPage extends Page {
 
     public List<String> getWpTitlesList() throws IOException {
         List<String> wpTitles = new ArrayList<String>();
-        waitUntilVisibility(wpTab, 5);
-        wpTab.click();
+        waitUntilVisibility(wpTab, 5).click();
         loadingElement();
         try {
             new WebDriverWait(driver, 5)
@@ -270,21 +266,12 @@ public class EngagementsPage extends Page {
 
     public void clickEditWpFoundById(String wpId) {
         try {
-            waitUntilVisibility(wpTab, 5);
-            wpTab.click();
+            waitUntilVisibility(wpTab, 5).click();
             loadingElement();
             driver.findElement(By.xpath("//*[text()='" + wpId + "']")).click();
             editEngagementDetailsButton.click();
             waitUntilVisibility(fluidContainer, 5);
         } catch (Exception ignore) {
-        }
-    }
-
-    public boolean footedIsDisplayed() {
-        try {
-            return displayedStaleWebElement(driver.findElement(By.xpath("//tfoot[contains(@id, 'rgridfoot')]//span[contains(text(),'Page')]")));
-        } catch (NoSuchElementException e) {
-            return false;
         }
     }
 
@@ -302,8 +289,7 @@ public class EngagementsPage extends Page {
 
     public String getWpLeadingPartner(String wpId) throws IOException {
         try {
-            waitUntilVisibility(wpTab, 5);
-            wpTab.click();
+            waitUntilVisibility(wpTab, 5).click();
             loadingElement();
             return driver.findElement(By.xpath("//*[text()='" + wpId + "']/../td[3]")).getAttribute("textContent");
         } catch (NoSuchElementException e) {
@@ -360,11 +346,8 @@ public class EngagementsPage extends Page {
 
     public void goToEngagementsPerformanceSection() {
         Actions actions = new Actions(driver);
-        waitUntilVisibility(engagementTopMenu, 5);
-        actions.moveToElement(engagementTopMenu).perform();
-        waitUntilVisibility(engagementPerformanceSubmenu, 3);
-        actions.moveToElement(engagementPerformanceSubmenu).perform();
-        waitUntilVisibility(firstEngagementFromSubmenu, 3);
-        actions.moveToElement(firstEngagementFromSubmenu).click().perform();
+        actions.moveToElement(waitUntilVisibility(engagementTopMenu, 5)).perform();
+        actions.moveToElement(waitUntilVisibility(engagementPerformanceSubmenu, 3)).perform();
+        actions.moveToElement(waitUntilVisibility(firstEngagementFromSubmenu, 3)).click().perform();
     }
 }

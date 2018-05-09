@@ -24,9 +24,9 @@ public class ExtractedWpDataTest extends Scenario {
         ReportReader extractTitles = new ReportReader(filePath, "WorkPackage", "Engagement ID->Title");
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
-        engagementsPage.navigateToEngegementOverviewPage();
+        engagementsPage.navigateToEngagementOverviewPage();
 
-        for (String id : engagementsPage.getWpEngagementsIdsSet(filePath)) {
+        for (String id : engagementsPage.getWpEngagementsIdsSetFromFile(filePath)) {
             engagementsPage.searchForEngagementOnGridById(id);
             engagementsPage.selectFoundEngagement();
 
@@ -54,9 +54,9 @@ public class ExtractedWpDataTest extends Scenario {
         ReportReader extractDesc = new ReportReader(filePath, "WorkPackage", "Engagement ID->Work Package ID->Description");
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
-        engagementsPage.navigateToEngegementOverviewPage();
+        engagementsPage.navigateToEngagementOverviewPage();
 
-        for (String engagementId : engagementsPage.getEngagementsIdsSet(filePath, "WorkPackage")) {
+        for (String engagementId : engagementsPage.getEngagementsIdsSetFromFile(filePath, "WorkPackage")) {
             engagementsPage.searchForEngagementOnGridById(engagementId);
             engagementsPage.selectFoundEngagement();
 
@@ -91,9 +91,9 @@ public class ExtractedWpDataTest extends Scenario {
         ReportReader extractWpPartners = new ReportReader(filePath, "WorkPackage", "Engagement ID->Work Package ID->Partners");
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
-        engagementsPage.navigateToEngegementOverviewPage();
+        engagementsPage.navigateToEngagementOverviewPage();
 
-        for (String engagementId : engagementsPage.getEngagementsIdsSet(filePath, "WorkPackage")) {
+        for (String engagementId : engagementsPage.getEngagementsIdsSetFromFile(filePath, "WorkPackage")) {
 
             engagementsPage.searchForEngagementOnGridById(engagementId);
             engagementsPage.selectFoundEngagement();
@@ -134,9 +134,9 @@ public class ExtractedWpDataTest extends Scenario {
     @Test(enabled = true, priority = 3)
     public void compareLeadingPartner() throws IOException, InterruptedException {
         EngagementsPage engagementsPage = new EngagementsPage(driver);
-        engagementsPage.navigateToEngegementOverviewPage();
+        engagementsPage.navigateToEngagementOverviewPage();
 
-        for (String engagementId : engagementsPage.getWpEngagementsIdsSet(filePath)) {
+        for (String engagementId : engagementsPage.getWpEngagementsIdsSetFromFile(filePath)) {
 
             engagementsPage.searchForEngagementOnGridById(engagementId);
             engagementsPage.selectFoundEngagement();

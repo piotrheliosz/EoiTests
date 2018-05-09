@@ -17,12 +17,12 @@ public class NewEngagementPage extends Page {
     public WebElement saveButton;
 
     private WebElement getPopUpInput(String elementName) {
-        return new WebDriverWait(driver, 5)
+        return new WebDriverWait(driver, 10)
                 .until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@data-field='Engagement." + elementName + "']//input")));
     }
 
     private WebElement getPopUpDiv(String elementName) {
-        return new WebDriverWait(driver, 5)
+        return new WebDriverWait(driver, 10)
                 .until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@data-field='Engagement." + elementName + "']")));
     }
 

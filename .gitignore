@@ -30,3 +30,10 @@ hs_err_pid*
 /target/
 /config.properties
 /ListOfEngagementsWithoutPrivilegesToEdit.xls
+/ListOfEngagementsWithoutEditorField.xls
+src/main/resources/
+/src/test/java/TempTest.java
+src/test/JMeter/Edit_WP.jmx
+src/test/JMeter/engagementsIds/engagements_ids__to_edit.csv
+src/test/JMeter/results/all_engagements.csv
+src/test/java/TempTest.java
