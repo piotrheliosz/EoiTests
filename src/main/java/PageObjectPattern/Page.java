@@ -13,11 +13,15 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.UUID;
 
 
 public class Page {
     static WebDriver driver;
-    private static File configFile = new File("config.properties");
+    private static final File configFile = new File("config.properties");
+    public static final String filePath = "BP2018_Engagements_Ids.xls";
+    public static final String engagementName = UUID.randomUUID().toString();
+    public static final String existingEngagementName = "ba2f6d06-fd60-4de5-9e06-1a05bbcb6233";
 
     Page(WebDriver driver) {
         Page.driver = driver;
@@ -36,7 +40,7 @@ public class Page {
         return null;
     }
 
-    public WebElement waitUntilVisibility(WebElement element, int timeout) {
+    WebElement waitUntilVisibility(WebElement element, int timeout) {
         loadingElement();
         return new WebDriverWait(driver, timeout).until(ExpectedConditions.visibilityOf(element));
     }
@@ -53,9 +57,9 @@ public class Page {
         }
     }
 
-    public void clickStaleWebElement(WebElement element) {
+    void clickStaleWebElement(WebElement element) {
         int attempts = 0;
-        while (attempts < 2) {
+        while (attempts < 5) {
             try {
                 element.click();
                 break;
@@ -70,12 +74,7 @@ public class Page {
                 (driver.findElements(By.xpath("//div[contains(@class, 'loader')]"))));
     }
 
-    String getPartId(int divIndex) {
-        return driver.findElement(By.xpath("(//*[contains(@id, 'partdiv')])[" + divIndex + "]"))
-                .getAttribute("id").substring(8);
-    }
-
-    public void takeScreenShot(String fileName) throws IOException {
+    public static void takeScreenShot(String fileName) throws IOException {
         File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
         FileUtils.copyFile(scrFile, new File("screenshots\\" + fileName + ".png"));
     }
@@ -104,9 +103,11 @@ public class Page {
     public void clickHomeButton() throws IOException {
         try {
             new WebDriverWait(driver, 10).until(ExpectedConditions.elementToBeClickable(By.id("homeButton"))).click();
-        } catch (TimeoutException e) {
+        } catch (WebDriverException e) {
             e.printStackTrace();
             takeScreenShot("clickHomeButton");
         }
+        loadingElement();
     }
+
 }

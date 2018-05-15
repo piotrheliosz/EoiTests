@@ -10,7 +10,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class MainPage extends Page {
     @FindBy(id = "outerContainer")
     private WebElement outerContainer;
-
     @FindBy(xpath = "//div[@id='menu-items']//a[text()='Engagements']")
     private WebElement engagementSectionLink;
 
@@ -18,13 +17,9 @@ public class MainPage extends Page {
         super(driver);
     }
 
-    public String getUserName() {
-        return driver.findElement(By.xpath("//h2[contains(@class, 'user-name')]")).getText();
-    }
-
-    public void navigateToPartnerSection() {
-        waitUntilVisibility(outerContainer, 30);
-        driver.navigate().to(getCredentials("baseUrl") + "/portal/kicinnoenergy-acc/page/all-partners/");
+    public void clickOnEngagementItemFromMenu() {
+        new WebDriverWait(driver, 30).until(ExpectedConditions.elementToBeClickable(engagementSectionLink)).click();
+        loadingElement();
     }
 
     public void navigateToEngagementsSection() {

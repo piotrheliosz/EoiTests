@@ -24,13 +24,13 @@ public class EngagementsPerformancePage extends Page {
 
     public void clickPartnersTab() {
         new WebDriverWait(driver, 5).until(ExpectedConditions
-                .elementToBeClickable(By.xpath("//div[@id='partdiv-" + getPartId(2) + "']//li[text()='Partners']")))
+                .elementToBeClickable(By.xpath("//div[contains(@id, 'partdiv')]//li[text()='Partners']")))
                 .click();
     }
 
     public void clickAddNewPartnerButton() {
         new WebDriverWait(driver, 5).until(ExpectedConditions
-                .elementToBeClickable(By.xpath("//div[@id='partdiv-" + getPartId(2) + "']//div[@id='New']")))
+                .elementToBeClickable(By.xpath("//div[contains(@id, 'partdiv')]//div[@id='New']")))
                 .click();
     }
 
@@ -49,7 +49,7 @@ public class EngagementsPerformancePage extends Page {
                 .until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class='item-table']//div[text()='" + itemName + "']")));
     }
 
-    public void addNewPartnerFromDropdown(String partnerName) {
+    public void selectNewPartnerFromDropdown(String partnerName) {
         getPopUpDiv("PartnerRef").click();
         getPopUpInput("PartnerRef").sendKeys(partnerName);
         getFoundItem(partnerName).click();
@@ -79,7 +79,7 @@ public class EngagementsPerformancePage extends Page {
     public boolean partnerIsDisplayedOnGrid(String partnerName) {
         try {
             return new WebDriverWait(driver, 10).until(ExpectedConditions
-                    .elementToBeClickable(By.xpath("//tbody[@id='rgridbody-" + getPartId(2) + "']//td[contains(text(),'" + partnerName + "')][1]")))
+                    .elementToBeClickable(By.xpath("//div[contains(@id, 'rgridbody')]//td[contains(text(),'" + partnerName + "')][1]")))
                     .isDisplayed();
         } catch (TimeoutException e) {
             return false;

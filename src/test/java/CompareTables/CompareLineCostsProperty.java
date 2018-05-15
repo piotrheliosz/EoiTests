@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
 public class CompareLineCostsProperty {
-    //C:\workspace\EoiTests\extracts\KISSExtract_BP2018_Cost_Line_Properties.xlsC:\workspace\EoiTests\extracts\KISSExtract_Property_ALL_BP2018.xls
+
     private String extractDataPath = "extracts\\KISSExtract_Property_ALL_BP2018.xls";
     private String eoiDataPath = "eoiData\\eoi_property_costLines_result.xls";
 
@@ -73,6 +73,7 @@ public class CompareLineCostsProperty {
 
     @Test
     public void valueShouldBeExtracted() throws IOException {
+
         //EXTRACTED DATA
         ReportReader extractEngagementsIds = new ReportReader
                 (extractDataPath, "Personnel Property", "Engagement ID");

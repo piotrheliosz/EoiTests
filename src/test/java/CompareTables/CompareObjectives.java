@@ -12,7 +12,7 @@ import static org.testng.AssertJUnit.assertEquals;
 public class CompareObjectives {
 
     private String extractDataPath = "extracts\\KISSExtract_Objective_BP2018.xls";
-    private String eioDataPath = "eoiData\\eoi_objective_result.xls";
+    private String eoiDataPath = "eoiData\\eoi_objective_result.xls";
 
 
     @Test
@@ -26,7 +26,7 @@ public class CompareObjectives {
 
         //EOI DATA
         ReportReader eoiObjectiveIds = new ReportReader
-                (eioDataPath, "objective_result", "Objective ID");
+                (eoiDataPath, "objective_result", "Objective ID");
 
         int i = 0;
         for (String extractedObjectiveId : extractObjectiveIds.getList("Objective ID")) {
@@ -51,7 +51,7 @@ public class CompareObjectives {
 
         //EOI DATA
         ReportReader eoiObjectiveTitles = new ReportReader
-                (eioDataPath, "objective_result", "Objective ID->Title");
+                (eoiDataPath, "objective_result", "Objective ID->Title");
 
         List<String> extractObjectiveIdsList = extractObjectiveIds.getList("Objective ID");
         for (String extractedObjectiveId : extractObjectiveIdsList) {

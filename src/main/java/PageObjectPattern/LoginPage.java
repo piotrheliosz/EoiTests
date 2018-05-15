@@ -8,7 +8,7 @@ import org.openqa.selenium.support.FindBy;
 public class LoginPage extends Page {
 
     @FindBy(id = "loginButton")
-    public WebElement loginButton;
+    private WebElement loginButton;
 
     public LoginPage(WebDriver driver) {
         super(driver);
@@ -20,5 +20,10 @@ public class LoginPage extends Page {
 
     public void sendPassword(String password) {
         driver.findElement(By.id("passwordInput")).sendKeys(password);
+    }
+
+    public void clickSubmit(){
+        loginButton.click();
+        loadingElement();
     }
 }

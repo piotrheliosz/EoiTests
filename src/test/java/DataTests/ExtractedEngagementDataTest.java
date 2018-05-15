@@ -12,16 +12,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static PageObjectPattern.Page.filePath;
+import static PageObjectPattern.Page.takeScreenShot;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 public class ExtractedEngagementDataTest extends Scenario {
 
-    //extracts/KISSExtract_Property_ALL_BP2018.xls
-    //private String filePath = "extracts\\KISSExtract_Engagement_BP2017Amendment.xls";
-    private String filePath = "extracts\\KISSExtract_Property_ALL_BP2018.xls";
-
-    @Test(enabled = true, priority = 0)
+    @Test(priority = 0)
     public void compareId() throws IOException, InterruptedException {
         MainPage mainPage = new MainPage(driver);
         mainPage.navigateToEngagementsSection();
@@ -37,12 +35,9 @@ public class ExtractedEngagementDataTest extends Scenario {
             }
             engagementsPage.engagementIdFilter.clear();
         }
-        int i = 0;
-        String s =  String.valueOf(i * i);
-        int ii = Integer.valueOf(s) * i;
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test(priority = 1)
     public void compareNames() throws IOException, InterruptedException {
         MainPage mainPage = new MainPage(driver);
         mainPage.navigateToEngagementsSection();
@@ -70,7 +65,7 @@ public class ExtractedEngagementDataTest extends Scenario {
         }
     }
 
-    @Test(enabled = true, priority = 2)
+    @Test(priority = 2)
     public void compareObjective() throws IOException, InterruptedException {
         MainPage mainPage = new MainPage(driver);
         mainPage.navigateToEngagementsSection();
@@ -93,7 +88,7 @@ public class ExtractedEngagementDataTest extends Scenario {
                     assertEquals(engagementsPage.getObjective(), objective);
                 } catch (TimeoutException e) {
                     e.printStackTrace();
-                    engagementsPage.takeScreenShot(id + " " + getClass().toString());
+                    takeScreenShot(id + " " + getClass().toString());
                 }
             } catch (AssertionError error) {
                 if (engagementsPage.getObjective().equals("") || !engagementsIds.get(i).contains("ENG")) {
@@ -108,7 +103,7 @@ public class ExtractedEngagementDataTest extends Scenario {
         }
     }
 
-    @Test(enabled = true, priority = 3)
+    @Test(priority = 3)
     public void compareScope() throws IOException, InterruptedException {
         MainPage mainPage = new MainPage(driver);
         mainPage.navigateToEngagementsSection();
@@ -131,7 +126,7 @@ public class ExtractedEngagementDataTest extends Scenario {
                     assertEquals(engagementsPage.getScope(), scope);
                 } catch (TimeoutException e) {
                     e.printStackTrace();
-                    engagementsPage.takeScreenShot(id + " " + getClass().toString());
+                    takeScreenShot(id + " " + getClass().toString());
                 }
             } catch (AssertionError error) {
                 if (engagementsPage.getScope().equals("") || !engagementsIds.get(i).contains("ENG")) {
@@ -144,7 +139,7 @@ public class ExtractedEngagementDataTest extends Scenario {
         }
     }
 
-    @Test(enabled = true, priority = 4)
+    @Test(priority = 4)
     public void compareTypes() throws IOException, InterruptedException {
         MainPage mainPage = new MainPage(driver);
         mainPage.navigateToEngagementsSection();
@@ -171,7 +166,7 @@ public class ExtractedEngagementDataTest extends Scenario {
         }
     }
 
-    @Test(enabled = true, priority = 5)
+    @Test(priority = 5)
     public void compareManagementUnits() throws IOException, InterruptedException {
         MainPage mainPage = new MainPage(driver);
         mainPage.navigateToEngagementsSection();
@@ -198,7 +193,7 @@ public class ExtractedEngagementDataTest extends Scenario {
         }
     }
 
-    @Test(enabled = true, priority = 6)
+    @Test(priority = 6)
     public void compareThematicFields() throws IOException, InterruptedException {
         MainPage mainPage = new MainPage(driver);
         mainPage.navigateToEngagementsSection();
@@ -231,7 +226,7 @@ public class ExtractedEngagementDataTest extends Scenario {
         }
     }
 
-    @Test(enabled = true, priority = 7)
+    @Test(priority = 7)
     public void compareBla() throws IOException, InterruptedException {
         MainPage mainPage = new MainPage(driver);
         mainPage.navigateToEngagementsSection();
@@ -257,7 +252,7 @@ public class ExtractedEngagementDataTest extends Scenario {
         }
     }
 
-    @Test(enabled = true, priority = 8)
+    @Test(priority = 8)
     public void comparePartnersId() throws IOException, InterruptedException {
         MainPage mainPage = new MainPage(driver);
         mainPage.navigateToEngagementsSection();
@@ -291,7 +286,7 @@ public class ExtractedEngagementDataTest extends Scenario {
                     eoiId = bits[bits.length - 1].substring(0, bits[bits.length - 1].length() - 1);
                 } catch (StringIndexOutOfBoundsException e) {
                     e.printStackTrace();
-                    engagementsPage.takeScreenShot("StringIndexOutOfBoundsException");
+                    takeScreenShot("StringIndexOutOfBoundsException");
                 }
 
                 eoiIds.add(eoiId);

@@ -7,13 +7,14 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.util.List;
 
+import static PageObjectPattern.Page.filePath;
+
 public class WpEditIsEnable extends Scenario {
 
 
     @Test
     public void alertShouldNotBeEnable() throws InterruptedException, IOException {
 
-        String filePath = "extracts\\KISSExtract_WorkPackage_BP2017Amendment.xls";
         int numberOfAlerts = 0;
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);

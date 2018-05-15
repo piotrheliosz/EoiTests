@@ -11,15 +11,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static PageObjectPattern.Page.filePath;
+import static PageObjectPattern.Page.takeScreenShot;
 import static org.testng.Assert.assertTrue;
 import static org.testng.AssertJUnit.assertEquals;
 
 public class ExtractedWpDataTest extends Scenario {
 
-    //private String filePath = "extracts\\KISSExtract_WorkPackage_BP2017Amendment.xls";
-    private String filePath = "extracts\\KISSExtract_WorkPackage_BP2018.xls";
-
-    @Test(enabled = true, priority = 0)
+    @Test(priority = 0)
     public void compareWpTitle() throws InterruptedException, IOException {
         ReportReader extractTitles = new ReportReader(filePath, "WorkPackage", "Engagement ID->Title");
 
@@ -48,7 +47,7 @@ public class ExtractedWpDataTest extends Scenario {
         }
     }
 
-    @Test(enabled = true, priority = 1) //TODO no access to WP Edit from Engagement Overview grid
+    @Test(priority = 1) //TODO no access to WP Edit from Engagement Overview grid
     public void compareWpDescription() throws InterruptedException, IOException {
         ReportReader extractWpIds = new ReportReader(filePath, "WorkPackage", "Engagement ID->Work Package ID");
         ReportReader extractDesc = new ReportReader(filePath, "WorkPackage", "Engagement ID->Work Package ID->Description");
@@ -85,7 +84,7 @@ public class ExtractedWpDataTest extends Scenario {
         }
     }
 
-    @Test(enabled = true, priority = 2) //TODO no access to WP Edit from Engagement Overview grid
+    @Test(priority = 2) //TODO no access to WP Edit from Engagement Overview grid
     public void compareWpPartners() throws InterruptedException, IOException {
         ReportReader extractWpIds = new ReportReader(filePath, "WorkPackage", "Engagement ID->Work Package ID");
         ReportReader extractWpPartners = new ReportReader(filePath, "WorkPackage", "Engagement ID->Work Package ID->Partners");
@@ -109,14 +108,14 @@ public class ExtractedWpDataTest extends Scenario {
                     try {
                         engagementsPage.clickEditWpFoundById(wpId);
                     } catch (Exception e) {
-                        engagementsPage.takeScreenShot(engagementId + "_editWpFoundById");
+                        takeScreenShot(engagementId + "_editWpFoundById");
                         e.printStackTrace();
                     }
                     try {
                         assertTrue(engagementsPage.getPartnerListsInWp().containsAll(extractedWpPartnersList));
                     } catch (AssertionError error) {
                         if (!engagementsPage.getPartnerListsInWp().isEmpty() && !extractedWpPartnersList.isEmpty()) {
-                            engagementsPage.takeScreenShot(engagementId + "_getPartnerListsInWp");
+                            takeScreenShot(engagementId + "_getPartnerListsInWp");
                             System.out.println(error + "\nEngagement Id: " + engagementId + "\nwpId: " + wpId
                                     + "\nengagementsPage.getPartnerListsInWp(): " + engagementsPage.getPartnerListsInWp()
                                     + "\nextractedWpPartnersList: " + extractedWpPartnersList + "\n");
@@ -131,7 +130,7 @@ public class ExtractedWpDataTest extends Scenario {
         }
     }
 
-    @Test(enabled = true, priority = 3)
+    @Test(priority = 3)
     public void compareLeadingPartner() throws IOException, InterruptedException {
         EngagementsPage engagementsPage = new EngagementsPage(driver);
         engagementsPage.navigateToEngagementOverviewPage();
@@ -141,7 +140,8 @@ public class ExtractedWpDataTest extends Scenario {
             engagementsPage.searchForEngagementOnGridById(engagementId);
             engagementsPage.selectFoundEngagement();
 
-            ReportReader extractedWpIds = new ReportReader(filePath, "WorkPackage", "Engagement ID->Work Package ID");
+            ReportReader extractedWpIds =
+                    new ReportReader(filePath, "WorkPackage", "Engagement ID->Work Package ID");
             List<String> wpIdsList = extractedWpIds.getList(engagementId + "->Work Package ID");
             for (String wpId : wpIdsList) {
 
@@ -150,12 +150,15 @@ public class ExtractedWpDataTest extends Scenario {
 
                 String wpLeadingPartnerId = "";
                 try {
-                    wpLeadingPartnerId = wpLeadingPartnerSplit[wpLeadingPartnerSplit.length - 1].substring(0, wpLeadingPartnerSplit[wpLeadingPartnerSplit.length - 1].length() - 1);
+                    wpLeadingPartnerId = wpLeadingPartnerSplit[wpLeadingPartnerSplit.length - 1]
+                            .substring(0, wpLeadingPartnerSplit[wpLeadingPartnerSplit.length - 1]
+                                    .length() - 1);
                 } catch (StringIndexOutOfBoundsException e) {
                     wpLeadingPartnerId = "";
                 }
 
-                ReportReader extractedLeadingPartners = new ReportReader(filePath, "WorkPackage", "Engagement ID->Work Package ID->Lead Partner");
+                ReportReader extractedLeadingPartners =
+                        new ReportReader(filePath, "WorkPackage", "Engagement ID->Work Package ID->Lead Partner");
                 String extractedLeadingPartnerId = extractedLeadingPartners.getSingle(engagementId + "->" + wpId + "->Lead Partner");
 
                 try {

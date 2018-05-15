@@ -1,53 +1,56 @@
 package FunctionalityTests;
 
 import PageObjectPattern.EngagementsPage;
+import PageObjectPattern.MainPage;
 import PageObjectPattern.NewEngagementPage;
 import SetUp.Scenario;
 import org.testng.annotations.Test;
 
-import java.util.UUID;
+import java.io.IOException;
 
-import static org.testng.Assert.assertFalse;
-import static org.testng.AssertJUnit.assertTrue;
-
+import static PageObjectPattern.Page.engagementName;
 
 public class AddAndRemoveEngagementTest extends Scenario {
 
-    private static String engagementName = UUID.randomUUID().toString();
-
     @Test(priority = 1)
-    public void engagementShouldBeAdded() {
+    public void engagementShouldBeAdded() throws IOException {
+
+        MainPage mainPage = new MainPage(driver);
+        mainPage.clickOnEngagementItemFromMenu();
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
-        engagementsPage.navigateToEngagementOverviewPage();
         engagementsPage.clickAddNewEngagementButton();
 
         NewEngagementPage newEngagementsPage = new NewEngagementPage(driver);
         newEngagementsPage.sendNewEngagementName(engagementName);
         newEngagementsPage.setTypeOfNewEngagement("Master School");
         newEngagementsPage.setParentPartnerToNewEngagement("KRAKEN");
-        newEngagementsPage.setBlaToNewEngagement("Innovation Projects");
+        newEngagementsPage.setBlaToNewEngagement("Innovation Projects Strategy & Business Development");
         newEngagementsPage.setManagementsUnitToNewEngagement("Central Europe");
-        newEngagementsPage.setManagerToNewEngagement("Piotr Heliosz");
-        newEngagementsPage.saveButton.click();
+        newEngagementsPage.setManagerToNewEngagement("piotr.heliosz");
+        newEngagementsPage.clickSaveButton();
 
         System.out.println("Engagement name: " + engagementName);
 
-        assertTrue(engagementsPage.searchForEngagementOnGridByName(engagementName));
+        softAssert.assertTrue(engagementsPage.searchForEngagementOnGridByName(engagementName));
 
-        engagementsPage.clearNameFilter();
+        engagementsPage.clickHomeButton();
     }
 
     @Test(priority = 2)
-    public void engagementShouldBeRemoved() {
+    public void engagementShouldBeRemoved() throws IOException {
+
+        MainPage mainPage = new MainPage(driver);
+        mainPage.clickOnEngagementItemFromMenu();
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
-        engagementsPage.navigateToEngagementOverviewPage();
         engagementsPage.searchForEngagementOnGridByName(engagementName);
         engagementsPage.selectFoundEngagement();
         engagementsPage.deleteSelectedEngagement();
-        engagementsPage.clearNameFilter();
+        engagementsPage.clickHomeButton();
 
-        assertFalse(engagementsPage.searchForEngagementOnGridByName(engagementName));
+        mainPage.clickOnEngagementItemFromMenu();
+
+        softAssert.assertFalse(engagementsPage.searchForEngagementOnGridByName(engagementName));
     }
 }

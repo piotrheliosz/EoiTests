@@ -30,7 +30,7 @@ public class EngagementsPage extends Page {
     @FindBy(xpath = "//i[@class='icon-close color-dark-hover']")
     private WebElement closePopUp;
     @FindBy(xpath = "//li[text()='Work Packages / Sections']")
-    public WebElement wpTab;
+    private WebElement wpTab;
     @FindBy(xpath = "//div[@class='container-fluid']")
     private WebElement fluidContainer;
     @FindBy(className = "overlay")
@@ -51,12 +51,14 @@ public class EngagementsPage extends Page {
     private WebElement engagementPerformanceSubmenu;
     @FindBy(xpath = "(//div[@id='mainToolbar']//span[text()='Engagement Performance']/..//a)[1]")
     private WebElement firstEngagementFromSubmenu;
+    @FindBy(xpath = "//*[contains(@id, 'partTitle')]//div[@id='New' and not(@style='display: none')]")
+    private WebElement newDisplayedButton;
 
     public EngagementsPage(WebDriver driver) {
         super(driver);
     }
 
-    public void searchForEngagementOnGridById(String engagementId) throws InterruptedException, IOException {
+    public void searchForEngagementOnGridById(String engagementId) {
         waitUntilVisibility(engagementIdFilter, 10);
         engagementIdFilter.sendKeys(engagementId);
         try {
@@ -70,6 +72,7 @@ public class EngagementsPage extends Page {
     }
 
     public boolean searchForEngagementOnGridByName(String engagementName) {
+        loadingElement();
         waitUntilVisibility(engagementNameFilter, 10);
         engagementNameFilter.sendKeys(engagementName);
         try {
@@ -157,7 +160,7 @@ public class EngagementsPage extends Page {
         }
     }
 
-    public String getScope() throws IOException {
+    public String getScope() {
         try {
             return waitUntilVisibility(scopeTextarea, 5).getAttribute("value");
         } catch (Exception e) {
@@ -167,17 +170,12 @@ public class EngagementsPage extends Page {
     }
 
     public String getThematicField() throws IOException {
-        if (!foundEngagementType().contains("BCS")) {
-            try {
-                waitUntilVisibility(thematicField, 5);
-                return thematicField.getText();
-            } catch (Exception e) {
-                e.printStackTrace();
-                takeScreenShot("noThemeticField");
-                return "NOT_FOND";
-            }
+        try {
+            return waitUntilVisibility(thematicField, 5).getAttribute("value");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "NOT_FOND";
         }
-        return "NOT_FOND";
     }
 
     public String getObjective() {
@@ -198,13 +196,12 @@ public class EngagementsPage extends Page {
         }
     }
 
-    public List<String> getFoundEngagementPartnersList() throws InterruptedException, IOException {
+    public List<String> getFoundEngagementPartnersList() throws IOException {
         partnersTab.click();
         List<String> partnersList = new ArrayList<String>();
         try {
             new WebDriverWait(driver, 5)
                     .until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath("//table/tbody[@class='rgrid rgridlist']/tr/td[1]"), 0));
-
             try {
                 for (WebElement partnerRow : driver.findElements(By.xpath("//table/tbody[@class='rgrid rgridlist']/tr/td[1]"))) {
                     String partner = partnerRow.getAttribute("textContent");
@@ -220,12 +217,12 @@ public class EngagementsPage extends Page {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            takeScreenShot(e.toString().substring(0, 20));
+            takeScreenShot("getFoundEngagementPartnersList");
         }
         return partnersList;
     }
 
-    public void closePopUp() throws IOException {
+    public void closePopUp() {
         try {
             waitUntilVisibility(closePopUp, 5).click();
             loadingElement();
@@ -287,7 +284,7 @@ public class EngagementsPage extends Page {
         }
     }
 
-    public String getWpLeadingPartner(String wpId) throws IOException {
+    public String getWpLeadingPartner(String wpId) {
         try {
             waitUntilVisibility(wpTab, 5).click();
             loadingElement();
@@ -298,7 +295,7 @@ public class EngagementsPage extends Page {
         }
     }
 
-    public List<String> getPartnerListsInWp() throws IOException {
+    public List<String> getPartnerListsInWp() {
         List<String> partnersIds = new ArrayList<String>();
         for (WebElement element : driver.findElements(By.xpath("//div[@coll-name='WorkPackage.Partners']/div[3]"))) {
             partnersIds.add(element.getAttribute("textContent"));
@@ -331,24 +328,28 @@ public class EngagementsPage extends Page {
     }
 
     public void clickAddNewEngagementButton() {
-        driver.findElement(By.xpath("//div[@id='partTitle-" + getPartId(1) + "']//div[@id='New']")).click();
+        loadingElement();
+        waitUntilVisibility(newDisplayedButton, 30).click();
     }
 
-    public void deleteSelectedEngagement() {
+    public void
+    deleteSelectedEngagement() {
         WebDriverWait wait = new WebDriverWait(driver, 10);
         loadingElement();
         wait.until(ExpectedConditions
-                .elementToBeClickable(By.xpath("//div[@id='partTitle-" + getPartId(1) + "']//div[@id='Delete']"))).click();
+                //.elementToBeClickable(By.xpath("//div[@id='partTitle-" + getPartId(1) + "']//div[@id='Delete']"))).click();
+                .elementToBeClickable(By.xpath("//div[contains(@id, 'partTitle')]//div[@id='Delete']"))).click();
         wait.until(ExpectedConditions
                 .elementToBeClickable(By.xpath("//div[@event='Yes']"))).click();
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//div[@event='Yes']")));
         loadingElement();
     }
 
-    private WebElement getEngagementOnPerformanceList(String engagementName) throws NoSuchElementException {
+    private WebElement getEngagementOnPerformanceList(String engagementName) {
         return driver.findElement(By.xpath("//*[text()='Engagement Performance']//..//*[contains(text(),'" + engagementName + "')]"));
     }
 
-    public void goToEngagementPerformancePageByJs(String engagementName){
+    public void goToEngagementPerformancePageByJs(String engagementName) {
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", getEngagementOnPerformanceList(engagementName));
     }
 

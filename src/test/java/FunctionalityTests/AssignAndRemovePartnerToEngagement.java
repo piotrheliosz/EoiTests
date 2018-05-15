@@ -9,11 +9,10 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 
+import static PageObjectPattern.Page.existingEngagementName;
 import static org.testng.AssertJUnit.assertTrue;
 
 public class AssignAndRemovePartnerToEngagement extends Scenario {
-
-    private String engagementName = "ba2f6d06-fd60-4de5-9e06-1a05bbcb6233";
 
     @DataProvider(name = "partnersNames")
     public static Object[] partnerToAdd() {
@@ -28,12 +27,12 @@ public class AssignAndRemovePartnerToEngagement extends Scenario {
         mainPage.navigateToEngagementsSection();
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
-        engagementsPage.goToEngagementPerformancePageByJs(engagementName);
+        engagementsPage.goToEngagementPerformancePageByJs(existingEngagementName);
 
         EngagementsPerformancePage engagementsPerformancePage = new EngagementsPerformancePage(driver);
         engagementsPerformancePage.clickPartnersTab();
         engagementsPerformancePage.clickAddNewPartnerButton();
-        engagementsPerformancePage.addNewPartnerFromDropdown(partnerToAdd);
+        engagementsPerformancePage.selectNewPartnerFromDropdown(partnerToAdd);
         engagementsPerformancePage.selectRoleType("Lead Partner");
         engagementsPerformancePage.saveAddPartner();
 
@@ -49,7 +48,7 @@ public class AssignAndRemovePartnerToEngagement extends Scenario {
         mainPage.navigateToEngagementsSection();
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
-        engagementsPage.goToEngagementPerformancePageByJs(engagementName);
+        engagementsPage.goToEngagementPerformancePageByJs(existingEngagementName);
 
         EngagementsPerformancePage engagementsPerformancePage = new EngagementsPerformancePage(driver);
         engagementsPerformancePage.clickPartnersTab();
@@ -57,7 +56,7 @@ public class AssignAndRemovePartnerToEngagement extends Scenario {
             engagementsPerformancePage.findPartnerOnGrid(partnerName).click();
             engagementsPerformancePage.removePartnerFromEngagement();
         }
-        engagementsPage.goToEngagementPerformancePageByJs(engagementName);
+        engagementsPage.goToEngagementPerformancePageByJs(existingEngagementName);
 
         assertTrue(engagementsPerformancePage.getPartnersList().isEmpty());
     }

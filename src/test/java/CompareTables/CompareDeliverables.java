@@ -11,18 +11,17 @@ import static org.testng.AssertJUnit.assertEquals;
 
 public class CompareDeliverables {
 
+    private String extractDataPath = "extracts\\KISSExtract_Deliverable_BP2018.xls";
+    private String eioDataPath = "eoiData\\eoi_deliverables_result.xls";
+
     @Test
-    public void deliverablesShouldBeExtracted() throws IOException{
+    public void deliverablesShouldBeExtracted() throws IOException {
 
         //EXTRACTED DATA
-        String extractDataPath = "extracts\\KISSExtract_Deliverable_BP2018.xls";
-
         ReportReader extractDeliverableIds = new ReportReader
                 (extractDataPath, "Deliverable", "Deliverable ID");
 
         //EOI DATA
-        String eioDataPath = "eoiData\\eoi_deliverables_result.xls";
-
         ReportReader eoiDeliverablesIds = new ReportReader
                 (eioDataPath, "deliverables_result", "Deliverable ID");
 
@@ -43,16 +42,12 @@ public class CompareDeliverables {
     public void compareDeliverablesTitles() throws IOException {
 
         //EXTRACTED DATA
-        String extractDataPath = "extracts\\KISSExtract_Deliverable_BP2018.xls";
-
         ReportReader extractDeliverableIds = new ReportReader
                 (extractDataPath, "Deliverable", "Deliverable ID");
         ReportReader extractDeliverableTitles = new ReportReader
                 (extractDataPath, "Deliverable", "Deliverable ID->Title");
 
         //EOI DATA
-        String eioDataPath = "eoiData\\eoi_deliverables_result.xls";
-
         ReportReader eoiDeliverablesTitles = new ReportReader
                 (eioDataPath, "deliverables_result", "Deliverable ID->Deliverable Title");
 
