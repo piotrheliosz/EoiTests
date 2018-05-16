@@ -1,7 +1,6 @@
 package PageObjectPattern;
 
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -11,6 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EngagementsPage extends Page {
+    public EngagementsPage(WebDriver driver) {
+        super(driver);
+    }
+
     @FindBy(xpath = "//input[contains(@id, 'EngagementID')]")
     public WebElement engagementIdFilter;
     @FindBy(xpath = "//input[contains(@id, 'Name')]")
@@ -37,26 +40,8 @@ public class EngagementsPage extends Page {
     private WebElement overlayDiv;
     @FindBy(xpath = "//div[@class='container-fluid']//textarea[@placeholder='Description']")
     private WebElement wpDescTextArea;
-    @FindBy(xpath = "//*[text()='View']")
-    private WebElement viewButton;
-    @FindBy(xpath = "//div[@data-field='Engagement.Managers']//span[@class='input-group-addon icon text-main']")
-    private WebElement addManagerButton;
-    @FindBy(xpath = "//div[@data-field='Engagement.Managers']//input")
-    private WebElement addManagerInput;
-    @FindBy(xpath = "//div[@event='Save' or @event='Done']")
-    private WebElement saveEvent;
-    @FindBy(xpath = "(//div[@id='mainToolbar']//span[text()='Engagements'])[1]")
-    private WebElement engagementTopMenu;
-    @FindBy(xpath = "//div[@id='mainToolbar']//span[text()='Engagement Performance']")
-    private WebElement engagementPerformanceSubmenu;
-    @FindBy(xpath = "(//div[@id='mainToolbar']//span[text()='Engagement Performance']/..//a)[1]")
-    private WebElement firstEngagementFromSubmenu;
     @FindBy(xpath = "//*[contains(@id, 'partTitle')]//div[@id='New' and not(@style='display: none')]")
     private WebElement newDisplayedButton;
-
-    public EngagementsPage(WebDriver driver) {
-        super(driver);
-    }
 
     public void searchForEngagementOnGridById(String engagementId) {
         waitUntilVisibility(engagementIdFilter, 10);
@@ -65,8 +50,8 @@ public class EngagementsPage extends Page {
             new WebDriverWait(driver, 3)
                     .until(ExpectedConditions.numberOfElementsToBe
                             (By.xpath("//table[1]/tbody[@class='rgrid rgridtree']/tr[contains(@id, 'row')]"), 1));
-        } catch (WebDriverException e) {
-            System.out.println("Engagement Id NOT FOUND: " + engagementId);
+        } catch (TimeoutException e) {
+            System.out.println("Engagement id NOT FOUND: " + engagementId);
         }
         loadingElement();
     }
@@ -80,8 +65,8 @@ public class EngagementsPage extends Page {
                     .until(ExpectedConditions.numberOfElementsToBe
                             (By.xpath("//table[1]/tbody[@class='rgrid rgridtree']/tr[contains(@id, 'row')]"), 1));
             return driver.findElement(By.xpath("//*[text()=' " + engagementName + "']")).isDisplayed();
-        } catch (WebDriverException e) {
-            System.out.println("Engagement Name NOT FOUND: " + engagementName);
+        } catch (TimeoutException e) {
+            System.out.println("Engagement name NOT FOUND: " + engagementName);
             loadingElement();
             return false;
         }
@@ -337,27 +322,13 @@ public class EngagementsPage extends Page {
         WebDriverWait wait = new WebDriverWait(driver, 10);
         loadingElement();
         wait.until(ExpectedConditions
-                //.elementToBeClickable(By.xpath("//div[@id='partTitle-" + getPartId(1) + "']//div[@id='Delete']"))).click();
                 .elementToBeClickable(By.xpath("//div[contains(@id, 'partTitle')]//div[@id='Delete']"))).click();
         wait.until(ExpectedConditions
                 .elementToBeClickable(By.xpath("//div[@event='Yes']"))).click();
+        double time1 = System.nanoTime();
         wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//div[@event='Yes']")));
         loadingElement();
+        double time2 = System.nanoTime();
+        System.out.println("Engagement removed in: " + (time2 - time1) / 1000000000 + " sec.");
     }
-
-    private WebElement getEngagementOnPerformanceList(String engagementName) {
-        return driver.findElement(By.xpath("//*[text()='Engagement Performance']//..//*[contains(text(),'" + engagementName + "')]"));
-    }
-
-    public void goToEngagementPerformancePageByJs(String engagementName) {
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", getEngagementOnPerformanceList(engagementName));
-    }
-
-    public void goToEngagementsPerformanceSection() {
-        Actions actions = new Actions(driver);
-        actions.moveToElement(waitUntilVisibility(engagementTopMenu, 5)).perform();
-        actions.moveToElement(waitUntilVisibility(engagementPerformanceSubmenu, 3)).perform();
-        actions.moveToElement(waitUntilVisibility(firstEngagementFromSubmenu, 3)).click().perform();
-    }
-
 }

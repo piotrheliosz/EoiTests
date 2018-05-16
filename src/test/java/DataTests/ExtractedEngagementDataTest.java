@@ -1,7 +1,7 @@
 package DataTests;
 
 import PageObjectPattern.EngagementsPage;
-import PageObjectPattern.MainPage;
+import PageObjectPattern.HomePage;
 import Reports.ReportReader;
 import SetUp.Scenario;
 import org.openqa.selenium.TimeoutException;
@@ -21,8 +21,8 @@ public class ExtractedEngagementDataTest extends Scenario {
 
     @Test(priority = 0)
     public void compareId() throws IOException, InterruptedException {
-        MainPage mainPage = new MainPage(driver);
-        mainPage.navigateToEngagementsSection();
+        HomePage homePage = new HomePage(driver);
+        homePage.navigateToEngagementsSection();
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
 
@@ -39,11 +39,11 @@ public class ExtractedEngagementDataTest extends Scenario {
 
     @Test(priority = 1)
     public void compareNames() throws IOException, InterruptedException {
-        MainPage mainPage = new MainPage(driver);
-        mainPage.navigateToEngagementsSection();
+        HomePage homePage = new HomePage(driver);
+        homePage.navigateToEngagementsSection();
 
         ReportReader extract = new ReportReader(filePath, "Engagement", "Engagement ID,Name");
-        List<String> engagementsIds = mainPage.getEngagementsIdsListFromFile(filePath);
+        List<String> engagementsIds = homePage.getEngagementsIdsListFromFile(filePath);
         List<String> engagementsNames = (extract.getList("Name"));
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
@@ -67,8 +67,8 @@ public class ExtractedEngagementDataTest extends Scenario {
 
     @Test(priority = 2)
     public void compareObjective() throws IOException, InterruptedException {
-        MainPage mainPage = new MainPage(driver);
-        mainPage.navigateToEngagementsSection();
+        HomePage homePage = new HomePage(driver);
+        homePage.navigateToEngagementsSection();
 
         ReportReader extract = new ReportReader(filePath, "Engagement", "Engagement ID,Objective");
         List<String> engagementsIds = (extract.getList("Engagement ID"));
@@ -105,8 +105,8 @@ public class ExtractedEngagementDataTest extends Scenario {
 
     @Test(priority = 3)
     public void compareScope() throws IOException, InterruptedException {
-        MainPage mainPage = new MainPage(driver);
-        mainPage.navigateToEngagementsSection();
+        HomePage homePage = new HomePage(driver);
+        homePage.navigateToEngagementsSection();
 
         ReportReader extract = new ReportReader(filePath, "Engagement", "Engagement ID,Scope");
         List<String> engagementsIds = (extract.getList("Engagement ID"));
@@ -141,8 +141,8 @@ public class ExtractedEngagementDataTest extends Scenario {
 
     @Test(priority = 4)
     public void compareTypes() throws IOException, InterruptedException {
-        MainPage mainPage = new MainPage(driver);
-        mainPage.navigateToEngagementsSection();
+        HomePage homePage = new HomePage(driver);
+        homePage.navigateToEngagementsSection();
 
         ReportReader extract = new ReportReader(filePath, "Engagement", "Engagement ID,Type");
         List<String> engagementsIds = (extract.getList("Engagement ID"));
@@ -168,8 +168,8 @@ public class ExtractedEngagementDataTest extends Scenario {
 
     @Test(priority = 5)
     public void compareManagementUnits() throws IOException, InterruptedException {
-        MainPage mainPage = new MainPage(driver);
-        mainPage.navigateToEngagementsSection();
+        HomePage homePage = new HomePage(driver);
+        homePage.navigateToEngagementsSection();
 
         ReportReader extract = new ReportReader(filePath, "Engagement", "Engagement ID,Management Unit");
         List<String> engagementsIds = (extract.getList("Engagement ID"));
@@ -195,8 +195,8 @@ public class ExtractedEngagementDataTest extends Scenario {
 
     @Test(priority = 6)
     public void compareThematicFields() throws IOException, InterruptedException {
-        MainPage mainPage = new MainPage(driver);
-        mainPage.navigateToEngagementsSection();
+        HomePage homePage = new HomePage(driver);
+        homePage.navigateToEngagementsSection();
 
         ReportReader extract = new ReportReader(filePath, "Engagement", "Engagement ID,Thematic Field");
         List<String> engagementsIds = (extract.getList("Engagement ID"));
@@ -228,8 +228,8 @@ public class ExtractedEngagementDataTest extends Scenario {
 
     @Test(priority = 7)
     public void compareBla() throws IOException, InterruptedException {
-        MainPage mainPage = new MainPage(driver);
-        mainPage.navigateToEngagementsSection();
+        HomePage homePage = new HomePage(driver);
+        homePage.navigateToEngagementsSection();
 
         ReportReader extract = new ReportReader(filePath, "Engagement", "Engagement ID,Business Line Area");
         List<String> engagementsIds = (extract.getList("Engagement ID"));
@@ -254,8 +254,8 @@ public class ExtractedEngagementDataTest extends Scenario {
 
     @Test(priority = 8)
     public void comparePartnersId() throws IOException, InterruptedException {
-        MainPage mainPage = new MainPage(driver);
-        mainPage.navigateToEngagementsSection();
+        HomePage homePage = new HomePage(driver);
+        homePage.navigateToEngagementsSection();
 
         ReportReader extract = new ReportReader(filePath, "Engagement", "Engagement ID,Partners");
         List<String> engagementsIds = (extract.getList("Engagement ID"));

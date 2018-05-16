@@ -1,7 +1,7 @@
 package FunctionalityTests;
 
 import PageObjectPattern.EngagementsPage;
-import PageObjectPattern.MainPage;
+import PageObjectPattern.HomePage;
 import PageObjectPattern.NewEngagementPage;
 import SetUp.Scenario;
 import org.testng.annotations.Test;
@@ -15,8 +15,8 @@ public class AddAndRemoveEngagementTest extends Scenario {
     @Test(priority = 1)
     public void engagementShouldBeAdded() throws IOException {
 
-        MainPage mainPage = new MainPage(driver);
-        mainPage.clickOnEngagementItemFromMenu();
+        HomePage homePage = new HomePage(driver);
+        homePage.clickOnEngagementItemFromMenu();
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
         engagementsPage.clickAddNewEngagementButton();
@@ -40,8 +40,8 @@ public class AddAndRemoveEngagementTest extends Scenario {
     @Test(priority = 2)
     public void engagementShouldBeRemoved() throws IOException {
 
-        MainPage mainPage = new MainPage(driver);
-        mainPage.clickOnEngagementItemFromMenu();
+        HomePage homePage = new HomePage(driver);
+        homePage.clickOnEngagementItemFromMenu();
 
         EngagementsPage engagementsPage = new EngagementsPage(driver);
         engagementsPage.searchForEngagementOnGridByName(engagementName);
@@ -49,7 +49,7 @@ public class AddAndRemoveEngagementTest extends Scenario {
         engagementsPage.deleteSelectedEngagement();
         engagementsPage.clickHomeButton();
 
-        mainPage.clickOnEngagementItemFromMenu();
+        homePage.clickOnEngagementItemFromMenu();
 
         softAssert.assertFalse(engagementsPage.searchForEngagementOnGridByName(engagementName));
     }

@@ -1,8 +1,7 @@
 package FunctionalityTests;
 
-import PageObjectPattern.EngagementsPage;
 import PageObjectPattern.EngagementsPerformancePage;
-import PageObjectPattern.MainPage;
+import PageObjectPattern.HomePage;
 import SetUp.Scenario;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -23,11 +22,9 @@ public class AssignAndRemovePartnerToEngagement extends Scenario {
     @Test(dataProvider = "partnersNames")
     public void partnersShouldBeAssignedToEngagement(String partnerToAdd) throws IOException {
 
-        MainPage mainPage = new MainPage(driver);
-        mainPage.navigateToEngagementsSection();
-
-        EngagementsPage engagementsPage = new EngagementsPage(driver);
-        engagementsPage.goToEngagementPerformancePageByJs(existingEngagementName);
+        HomePage homePage = new HomePage(driver);
+        homePage.navigateToEngagementsSection();
+        homePage.goToEngagementPerformancePageByJs(existingEngagementName);
 
         EngagementsPerformancePage engagementsPerformancePage = new EngagementsPerformancePage(driver);
         engagementsPerformancePage.clickPartnersTab();
@@ -38,17 +35,15 @@ public class AssignAndRemovePartnerToEngagement extends Scenario {
 
         assertTrue(engagementsPerformancePage.partnerIsDisplayedOnGrid(partnerToAdd));
 
-        mainPage.clickHomeButton();
+        homePage.clickHomeButton();
     }
 
     @Test
     public void partnersShouldBeRemovedFromEngagement() {
 
-        MainPage mainPage = new MainPage(driver);
-        mainPage.navigateToEngagementsSection();
-
-        EngagementsPage engagementsPage = new EngagementsPage(driver);
-        engagementsPage.goToEngagementPerformancePageByJs(existingEngagementName);
+        HomePage homePage = new HomePage(driver);
+        homePage.navigateToEngagementsSection();
+        homePage.goToEngagementPerformancePageByJs(existingEngagementName);
 
         EngagementsPerformancePage engagementsPerformancePage = new EngagementsPerformancePage(driver);
         engagementsPerformancePage.clickPartnersTab();
@@ -56,7 +51,8 @@ public class AssignAndRemovePartnerToEngagement extends Scenario {
             engagementsPerformancePage.findPartnerOnGrid(partnerName).click();
             engagementsPerformancePage.removePartnerFromEngagement();
         }
-        engagementsPage.goToEngagementPerformancePageByJs(existingEngagementName);
+
+        homePage.goToEngagementPerformancePageByJs(existingEngagementName);
 
         assertTrue(engagementsPerformancePage.getPartnersList().isEmpty());
     }
