@@ -31,3 +31,5 @@ hs_err_pid*
 /src/test/java/TempTest.java
 !/src/test/JMeter/
 /EoiTests.iml
+/Inno_Engagements_Ids.xls
+/BP2018_Engagements_Ids.xls
